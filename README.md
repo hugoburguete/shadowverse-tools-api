@@ -1,0 +1,1 @@
+# shadowverse-tools-api
