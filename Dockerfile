@@ -8,12 +8,16 @@ RUN corepack enable
 COPY . /app
 WORKDIR /app
 
+
 # Development
 FROM base AS development
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
+# Install ps so we can use the debugger
+RUN apt-get update && apt-get install -y procps 
 EXPOSE 3000
 CMD [ "pnpm", "start:debug" ]
+
 
 # Production
 FROM base AS build
