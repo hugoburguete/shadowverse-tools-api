@@ -15,6 +15,10 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 # Install ps so we can use the debugger
 RUN apt-get update && apt-get install -y procps 
+
+# Utilities
+RUN pnpm install -g @nestjs/cli
+
 EXPOSE 1337
 CMD [ "pnpm", "start:debug" ]
 
