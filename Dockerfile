@@ -15,7 +15,7 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 # Install ps so we can use the debugger
 RUN apt-get update && apt-get install -y procps 
-EXPOSE 3000
+EXPOSE 1337
 CMD [ "pnpm", "start:debug" ]
 
 
@@ -28,5 +28,5 @@ FROM base AS production
 COPY --from=build /app /app
 RUN pnpm install --prod --frozen-lockfile
 
-EXPOSE 3000
+EXPOSE 1337
 CMD [ "pnpm", "start:prod" ]

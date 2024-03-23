@@ -7,7 +7,7 @@ services:
             target: development
             dockerfile: ./Dockerfile
         ports:
-            - 3000:3000
+            - 1337:1337
             - 9229:9229
         volumes:
             - .:/app
