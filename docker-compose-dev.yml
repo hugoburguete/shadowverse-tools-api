@@ -1,7 +1,11 @@
+version: '3'
+
 services:
   web:
     container_name: shadowverse-tools-api
     image: shadowverse-tools-api-dev:1.0.0
+    depends_on:
+      - database
     build:
       context: .
       target: development
@@ -13,3 +17,24 @@ services:
       - .:/app
       - /app/node_modules
     restart: unless-stopped
+    networks:
+      - shadowverse-tools-network
+  database:
+    container_name: shadowverse-tools-db
+    image: 'mysql:8.3'
+    restart: always
+    ports:
+      - 3306:3306
+    env_file:
+      - .env
+    environment:
+      - MYSQL_ROOT_PASSWORD=$DATABASE_PASSWORD
+      - MYSQL_DATABASE=$DATABASE_DB
+    volumes:
+      - ./db-data:/var/lib/mysql
+    networks:
+      - shadowverse-tools-network
+
+networks:
+  shadowverse-tools-network:
+    external: false
