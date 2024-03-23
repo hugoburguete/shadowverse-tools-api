@@ -1,17 +1,15 @@
 services:
-    prod:
-        container_name: shadowverse-tools-api
-        image: shadowverse-tools-api-prod:1.0.0
-        build:
-            context: .
-            target: production
-            dockerfile: ./Dockerfile
-        ports:
-            - 3000:3000
-            - 9229:9229
-        networks:
-            - nesjs-network
-        volumes:
-            - .:/app
-            - /app/node_modules
-        restart: unless-stopped
+  web:
+    container_name: shadowverse-tools-api
+    image: shadowverse-tools-api-prod:1.0.0
+    build:
+      context: .
+      target: production
+      dockerfile: ./Dockerfile
+    ports:
+      - 1337:1337
+      - 9229:9229
+    volumes:
+      - .:/app
+      - /app/node_modules
+    restart: unless-stopped

@@ -1,15 +1,15 @@
 services:
-    dev:
-        container_name: shadowverse-tools-api
-        image: shadowverse-tools-api-dev:1.0.0
-        build:
-            context: .
-            target: development
-            dockerfile: ./Dockerfile
-        ports:
-            - 1337:1337
-            - 9229:9229
-        volumes:
-            - .:/app
-            - /app/node_modules
-        restart: unless-stopped
+  web:
+    container_name: shadowverse-tools-api
+    image: shadowverse-tools-api-dev:1.0.0
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    ports:
+      - 1337:1337
+      - 9229:9229
+    volumes:
+      - .:/app
+      - /app/node_modules
+    restart: unless-stopped
