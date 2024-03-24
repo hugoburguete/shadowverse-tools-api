@@ -31,6 +31,10 @@ module.exports = {
         allowNull: true,
       },
       image: Sequelize.STRING,
+      rarity: {
+        type: Sequelize.STRING(3),
+        allowNull: true,
+      },
     });
   },
 

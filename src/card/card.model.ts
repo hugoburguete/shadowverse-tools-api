@@ -39,4 +39,8 @@ export class Card extends Model {
   @Field(() => String)
   @Column
   image: string;
+
+  @Field(() => String)
+  @Column
+  rarity: string;
 }
