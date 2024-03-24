@@ -2,22 +2,21 @@
 
 API for the shadowverse tools app
 
-## Installation
+## Setup
 
-```bash
-$ pnpm install
-# OR
-$ npm install
-```
+- Setup [docker](https://www.docker.com/get-started/)
+- Create a `.env` file from the `.env.example` template
 
 ## Development
 
 ```bash
-# Using docker
-$ docker-compose up dev
+# Start docker compose
+$ docker-compose -f docker-compose-dev.yml up
 
-# Without docker
-$ pnpm run dev
-# OR
-$ npm run dev
+# Querying the database
+$ docker exec -it shadowverse-tools-db mysql -p -e 'SELECT * from cards' shadowverse-tools-db
+
+# Migrate
+$ docker exec -it shadowverse-tools-api npx sequelize-cli db:migrate
+$ docker exec -it shadowverse-tools-api npx sequelize-cli db:seed:all
 ```
