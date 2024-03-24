@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Op } from 'sequelize';
 import { Card } from './card.model';
+import { FindAllCardsArgs } from './dto/find-all.args';
 import { SearchCardsArgs } from './dto/search.args';
 
 @Injectable()
@@ -11,18 +12,49 @@ export class CardService {
     private cardModel: typeof Card,
   ) {}
 
-  async findAll(): Promise<Card[]> {
-    return await this.cardModel.findAll();
+  /**
+   * Retrieves all cards
+   */
+  async findAll(
+    findAllCriteria: FindAllCardsArgs = new FindAllCardsArgs(),
+  ): Promise<Card[]> {
+    return await this.cardModel.findAll({
+      offset: findAllCriteria.skip,
+      limit: findAllCriteria.take,
+    });
   }
 
-  async searchCards(searchCriteria: SearchCardsArgs): Promise<Card[]> {
+  /**
+   * Searches for cards.
+   *
+   * @param searchCriteria Search options
+   * @returns the card results that match the search criteria
+   */
+  async searchCards(
+    searchCriteria: SearchCardsArgs = new SearchCardsArgs(),
+  ): Promise<Card[]> {
     const searchTerm = searchCriteria.searchTerm.toLowerCase();
+    if (!searchTerm) {
+      return Promise.resolve([]);
+    }
     return await this.cardModel.findAll({
       where: {
-        name: {
-          [Op.substring]: searchTerm,
-        },
+        [Op.or]: [
+          {
+            name: {
+              [Op.substring]: searchTerm,
+            },
+          },
+          {
+            class: { [Op.substring]: searchTerm },
+          },
+          {
+            trait: { [Op.substring]: searchTerm },
+          },
+        ],
       },
+      offset: searchCriteria.skip,
+      limit: searchCriteria.take,
     });
   }
 }
