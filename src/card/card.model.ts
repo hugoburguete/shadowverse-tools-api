@@ -42,5 +42,5 @@ export class Card extends Model {
 
   @Field(() => String)
   @Column
-  rarity: string;
+  rarity?: string;
 }
