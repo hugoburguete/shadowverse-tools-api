@@ -40,7 +40,7 @@ export class Card extends Model {
   @Column
   image: string;
 
-  @Field(() => String)
+  @Field(() => String, { nullable: true })
   @Column
   rarity?: string;
 }
