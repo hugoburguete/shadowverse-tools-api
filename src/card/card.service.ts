@@ -25,6 +25,13 @@ export class CardService {
   }
 
   /**
+   * Helper function that determines if a search is completely empty
+   */
+  private isEmptySearch(searchCriteria: SearchCardsArgs): boolean {
+    return !searchCriteria.searchTerm;
+  }
+
+  /**
    * Searches for cards.
    *
    * @param searchCriteria Search options
@@ -33,10 +40,12 @@ export class CardService {
   async searchCards(
     searchCriteria: SearchCardsArgs = new SearchCardsArgs(),
   ): Promise<Card[]> {
-    const searchTerm = searchCriteria.searchTerm.toLowerCase();
-    if (!searchTerm) {
-      return Promise.resolve([]);
+    const { skip, take } = searchCriteria;
+    if (this.isEmptySearch(searchCriteria)) {
+      return this.findAll({ skip, take });
     }
+
+    const searchTerm = searchCriteria.searchTerm.toLowerCase();
     return await this.cardModel.findAll({
       where: {
         [Op.or]: [
@@ -53,8 +62,8 @@ export class CardService {
           },
         ],
       },
-      offset: searchCriteria.skip,
-      limit: searchCriteria.take,
+      offset: skip,
+      limit: take,
     });
   }
 }

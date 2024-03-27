@@ -16,6 +16,10 @@ import { CardsModule } from './card/card.module';
       driver: ApolloDriver,
       autoSchemaFile: true,
       sortSchema: true,
+      formatError: (error) => ({
+        code: error.extensions?.code,
+        message: error.message,
+      }),
     }),
     SequelizeModule.forRoot({
       dialect: process.env.DATABASE_TYPE,
