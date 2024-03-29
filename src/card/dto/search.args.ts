@@ -1,8 +1,14 @@
-import { ArgsType, Field } from '@nestjs/graphql';
-import { RetrievingArgs } from './retrieving.arts';
+import { ArgsType, Field, Int } from '@nestjs/graphql';
+import { RetrieveArgs } from './retrieve.args';
 
 @ArgsType()
-export class SearchCardsArgs extends RetrievingArgs {
+export class SearchCardsArgs extends RetrieveArgs {
   @Field(() => String)
   searchTerm = '';
+
+  @Field(() => [Int])
+  cost = [];
+
+  @Field(() => [String])
+  types = [];
 }

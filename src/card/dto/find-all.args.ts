@@ -1,5 +1,5 @@
 import { ArgsType } from '@nestjs/graphql';
-import { RetrievingArgs } from './retrieving.arts';
+import { RetrieveArgs } from './retrieve.args';
 
 @ArgsType()
-export class FindAllCardsArgs extends RetrievingArgs {}
+export class FindAllCardsArgs extends RetrieveArgs {}
