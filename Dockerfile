@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y procps
 # Utilities
 RUN pnpm install -g @nestjs/cli
 
-EXPOSE 1337
+EXPOSE 1337 9229
 CMD [ "pnpm", "start:debug" ]
 
 
