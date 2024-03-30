@@ -5,12 +5,13 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { SequelizeModule, SequelizeModuleOptions } from '@nestjs/sequelize';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { Card } from './card/card.model';
 import { CardsModule } from './card/card.module';
+import { Card } from './card/entities/card.entities';
+import { Expansion } from './expansion/entities/expansion.entity';
+import { ExpansionModule } from './expansion/expansion.module';
 
 @Module({
   imports: [
-    CardsModule,
     ConfigModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -28,8 +29,10 @@ import { CardsModule } from './card/card.module';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_DB,
-      models: [Card],
+      models: [Card, Expansion],
     } as SequelizeModuleOptions),
+    CardsModule,
+    ExpansionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

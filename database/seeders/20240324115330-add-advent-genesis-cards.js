@@ -1,7 +1,5 @@
 'use strict';
 
-const { Op } = require('sequelize');
-
 const cards = [
   {
     name: 'Rose Queen',
@@ -2379,7 +2377,7 @@ const cards = [
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  async up(queryInterface) {
     await queryInterface.bulkInsert('cards', cards);
   },
 
@@ -2388,7 +2386,7 @@ module.exports = {
       'cards',
       {
         cardId: {
-          [Op.in]: cards.map((card) => card.cardId),
+          [Sequelize.Op.in]: cards.map((card) => card.cardId),
         },
       },
       {},

@@ -1,5 +1,12 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, Model, Table } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  ForeignKey,
+  Model,
+  Table,
+} from 'sequelize-typescript';
+import { Expansion } from 'src/expansion/entities/expansion.entity';
 
 @ObjectType()
 @Table({ timestamps: false })
@@ -7,6 +14,15 @@ export class Card extends Model {
   @Field(() => String)
   @Column
   cardId: string;
+
+  @Field(() => Int)
+  @ForeignKey(() => Expansion)
+  @Column
+  expansionId: string;
+
+  @Field(() => Expansion)
+  @BelongsTo(() => Expansion)
+  expansion: Expansion;
 
   @Field(() => String)
   @Column
