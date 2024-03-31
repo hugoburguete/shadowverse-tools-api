@@ -1,50 +1,63 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { Kind, SelectionNode } from 'graphql';
-import { GQLRequestFields } from '../types/fields.entity';
+import {
+  FieldsByTypeName,
+  parseResolveInfo,
+  ResolveTree,
+} from 'graphql-parse-resolve-info';
 
-/**
- * Parses the fields requested from a GQL request into a more easily manageable
- * array.
- */
-export const Fields = <T extends string, U>() => {
-  return createParamDecorator<
-    unknown,
-    ExecutionContext,
-    GQLRequestFields<T, U>[]
-  >((_data: unknown, appCtx: ExecutionContext) => {
-    const ctx = GqlExecutionContext.create(appCtx);
-    const info = ctx.getInfo();
+export const fieldsFactory = (_data: unknown, appCtx: ExecutionContext) => {
+  const ctx = GqlExecutionContext.create(appCtx);
+  const info = ctx.getInfo();
 
-    return parseSelections<T, U>(info.fieldNodes[0].selectionSet.selections);
-  })();
+  const parsed = parseResolveInfo(info) as ResolveTree;
+  return parseFieldsByTypename(parsed.fieldsByTypeName);
 };
 
 /**
- * Simple parser that retrieve all fields requested from a GQL request.
- *
- * @param selections
- * @returns
+ * Decorator that parses the fields requested from a GQL request into a more
+ * easy to manage structure.
  */
-const parseSelections = <T extends string, U>(
-  selections: readonly SelectionNode[],
-): GQLRequestFields<T, U>[] => {
-  return selections
-    .map((item) => {
-      if (item.kind === Kind.FIELD) {
-        const struct = {
-          name: item.name.value as T,
-          children: [],
-        };
+export const Fields = () => {
+  return createParamDecorator<unknown, ExecutionContext>(fieldsFactory)();
+};
 
-        if (item.selectionSet) {
-          struct.children = parseSelections(
-            item.selectionSet.selections,
-          ) as U[];
-        }
-        return struct;
-      }
-      return null;
+export type ParsedField = {
+  fields: string[];
+  relations: Record<string, ParsedField>;
+};
+
+export const parseFieldsByTypename = (
+  fieldsByTypeName: FieldsByTypeName,
+): ParsedField => {
+  const fields = fieldsByTypeName[Object.keys(fieldsByTypeName)[0]];
+  const fieldNames = Object.keys(fields)
+    .filter((fieldKey) => {
+      return (
+        fields[fieldKey].fieldsByTypeName &&
+        Object.keys(fields[fieldKey].fieldsByTypeName).length === 0
+      );
     })
-    .filter((s) => s !== null);
+    .map((fieldKey) => fields[fieldKey].name);
+
+  const fieldsWithRelations = Object.keys(fields).filter((fieldKey) => {
+    return (
+      fields[fieldKey].fieldsByTypeName &&
+      Object.keys(fields[fieldKey].fieldsByTypeName).length !== 0
+    );
+  });
+  const relations = {};
+
+  for (let i = 0; i < fieldsWithRelations.length; i++) {
+    const relationName = fieldsWithRelations[i];
+    const fieldRelation = fields[fieldsWithRelations[i]];
+    relations[relationName] = parseFieldsByTypename(
+      fieldRelation.fieldsByTypeName,
+    );
+  }
+
+  return {
+    fields: fieldNames,
+    relations: relations,
+  };
 };

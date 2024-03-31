@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Includeable, Op, Sequelize } from 'sequelize';
-import { CardAttributes } from 'src/card/dto/retrieve.args';
 import { Card } from 'src/card/entities/card.entities';
+import { ParsedField } from 'src/utils/graphql/decorators/fields.decorator';
 import { FindAllExpansionsArgs } from './dto/find-all-expansions.args';
 import { Expansion } from './entities/expansion.entity';
 
@@ -19,15 +19,11 @@ export class ExpansionService {
     skip,
     take,
   }: FindAllExpansionsArgs): Promise<Expansion[]> {
-    const attributes = attrs
-      .filter((a) => a.name !== 'cards')
-      .map((attr) => attr.name);
-
     const include: Includeable[] = [];
 
-    const cardsAttr = attrs.find((a) => a.name === 'cards');
+    const cardsAttr = attrs.relations.cards;
     if (cardsAttr) {
-      include.push(this.getCardAssociation(cardsAttr.children));
+      include.push(this.getCardAssociation(cardsAttr));
     }
 
     const whereArgs = [];
@@ -52,7 +48,7 @@ export class ExpansionService {
       where: whereOptions,
       offset: skip,
       limit: take,
-      attributes,
+      attributes: attrs.fields,
       include,
     });
   }
@@ -61,10 +57,10 @@ export class ExpansionService {
     return await this.expansionModel.findOne({ where: { id } });
   }
 
-  private getCardAssociation(attributes: CardAttributes[]): Includeable {
+  private getCardAssociation(field: ParsedField): Includeable {
     return {
       model: Card,
-      attributes: attributes.map((attr) => attr.name),
+      attributes: field.fields,
     };
   }
 }

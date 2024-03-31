@@ -1,7 +1,6 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
 import { Max, Min } from 'class-validator';
-import { ExpansionAttributes } from 'src/expansion/dto/fetch.args';
-import { Card } from '../entities/card.entities';
+import { ParsedField } from 'src/utils/graphql/decorators/fields.decorator';
 
 @ArgsType()
 export abstract class RetrieveArgs {
@@ -14,12 +13,5 @@ export abstract class RetrieveArgs {
   @Max(50)
   take = 25;
 
-  attributes: CardAttributes[];
+  attributes: ParsedField;
 }
-
-export type CardFields = keyof Card | 'expansion';
-
-export type CardAttributes = {
-  name: CardFields;
-  children: ExpansionAttributes[];
-};

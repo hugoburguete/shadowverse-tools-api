@@ -1,8 +1,9 @@
-import { Args, Info, Query, Resolver } from '@nestjs/graphql';
-import { ExpansionFields } from 'src/expansion/dto/fetch.args';
-import { Fields } from 'src/utils/graphql/decorators/fields.decorator';
+import { Args, Query, Resolver } from '@nestjs/graphql';
+import {
+  Fields,
+  ParsedField,
+} from 'src/utils/graphql/decorators/fields.decorator';
 import { CardService } from './card.service';
-import { CardAttributes, CardFields } from './dto/retrieve.args';
 import { SearchCardsArgs } from './dto/search.args';
 import { Card } from './entities/card.entities';
 
@@ -13,8 +14,7 @@ export class CardResolver {
   @Query(() => [Card])
   async getCards(
     @Args() searchCardsArgs: SearchCardsArgs,
-    @Fields<CardFields, ExpansionFields>()
-    attributes: CardAttributes[],
+    @Fields() attributes: ParsedField,
   ): Promise<Card[]> {
     searchCardsArgs.attributes = attributes;
     return await this.cardService.findAll(searchCardsArgs);
@@ -23,13 +23,9 @@ export class CardResolver {
   @Query(() => [Card])
   async searchCards(
     @Args() searchCardsArgs: SearchCardsArgs,
-    @Info() info,
+    @Fields() attributes: ParsedField,
   ): Promise<Card[]> {
-    // TODO: Replace this with https://github.com/Jenyus-Org/graphql-utils?tab=readme-ov-file#installation
-    const attributes = info.fieldNodes[0].selectionSet.selections.map(
-      (item) => item.name.value,
-    );
-    console.log(JSON.stringify(attributes));
-    return this.cardService.searchCards(searchCardsArgs, attributes);
+    searchCardsArgs.attributes = attributes;
+    return this.cardService.searchCards(searchCardsArgs);
   }
 }

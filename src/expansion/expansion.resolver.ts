@@ -1,7 +1,8 @@
 import { Args, Int, Query, Resolver } from '@nestjs/graphql';
-import { CardFields } from 'src/card/dto/retrieve.args';
-import { Fields } from 'src/utils/graphql/decorators/fields.decorator';
-import { ExpansionAttributes, ExpansionFields } from './dto/fetch.args';
+import {
+  Fields,
+  ParsedField,
+} from 'src/utils/graphql/decorators/fields.decorator';
 import { FindAllExpansionsArgs } from './dto/find-all-expansions.args';
 import { Expansion } from './entities/expansion.entity';
 import { ExpansionService } from './expansion.service';
@@ -13,8 +14,7 @@ export class ExpansionResolver {
   @Query(() => [Expansion], { name: 'expansions' })
   async findAll(
     @Args() args: FindAllExpansionsArgs,
-    @Fields<ExpansionFields, CardFields>()
-    attributes: ExpansionAttributes[],
+    @Fields() attributes: ParsedField,
   ) {
     args.attributes = attributes;
     return await this.expansionService.findAll(args);

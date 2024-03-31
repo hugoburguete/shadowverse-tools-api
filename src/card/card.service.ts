@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Includeable, Op, Sequelize } from 'sequelize';
-import { ExpansionAttributes } from 'src/expansion/dto/fetch.args';
 import { Expansion } from 'src/expansion/entities/expansion.entity';
+import { ParsedField } from 'src/utils/graphql/decorators/fields.decorator';
 import { FindAllCardsArgs } from './dto/find-all.args';
-import { CardFields } from './dto/retrieve.args';
 import { SearchCardsArgs } from './dto/search.args';
 import { Card } from './entities/card.entities';
 
@@ -25,21 +24,12 @@ export class CardService {
       take,
     }: FindAllCardsArgs = new FindAllCardsArgs(),
   ): Promise<Card[]> {
-    const attributes = attrs
-      .filter((a) => a.name !== 'expansion')
-      .map((attr) => attr.name);
-
-    const include: Includeable[] = [];
-
-    const expansionAttr = attrs.find((a) => a.name === 'expansion');
-    if (expansionAttr) {
-      include.push(this.getExpansionAssociation(expansionAttr.children));
-    }
+    const include: Includeable[] = this.getAssociations(attrs);
 
     return await this.cardModel.findAll({
       offset: skip,
       limit: take,
-      attributes,
+      attributes: attrs.fields,
       include,
     });
   }
@@ -59,12 +49,11 @@ export class CardService {
    */
   async searchCards(
     searchCriteria: SearchCardsArgs = new SearchCardsArgs(),
-    attributes: CardFields[],
   ): Promise<Card[]> {
-    const { skip, take } = searchCriteria;
-    // if (this.isEmptySearch(searchCriteria)) {
-    //   return this.findAll({ skip, take });
-    // }
+    const { skip, take, attributes } = searchCriteria;
+    if (this.isEmptySearch(searchCriteria)) {
+      return this.findAll(searchCriteria);
+    }
 
     const { cost, types } = searchCriteria;
 
@@ -95,6 +84,8 @@ export class CardService {
       };
     });
 
+    const include: Includeable[] = this.getAssociations(attributes);
+
     return await this.cardModel.findAll({
       where: Sequelize.and([
         Sequelize.or(...searchTermCondition),
@@ -103,12 +94,22 @@ export class CardService {
       ]),
       offset: skip,
       limit: take,
-      attributes,
+      attributes: attributes.fields,
+      include,
     });
   }
 
-  getExpansionAssociation = (attributes: ExpansionAttributes[]) => ({
+  private getAssociations = (attributes: ParsedField): Includeable[] => {
+    const include = [];
+    const expansionAttr = attributes.relations.expansion;
+    if (expansionAttr) {
+      include.push(this.getExpansionAssociation(expansionAttr));
+    }
+    return include;
+  };
+
+  private getExpansionAssociation = (attributes: ParsedField) => ({
     model: Expansion,
-    attributes: attributes.map((attr) => attr.name),
+    attributes: attributes.fields,
   });
 }
