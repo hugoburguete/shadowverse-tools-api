@@ -37,8 +37,13 @@ export class CardService {
   /**
    * Helper function that determines if a search is completely empty
    */
-  private isEmptySearch({ searchTerm, cost, types }: SearchCardsArgs): boolean {
-    return !searchTerm && !cost.length && !types.length;
+  private isEmptySearch({
+    searchTerm,
+    cost,
+    types,
+    expansions,
+  }: SearchCardsArgs): boolean {
+    return !searchTerm && !cost.length && !types.length && !expansions.length;
   }
 
   /**
@@ -55,7 +60,7 @@ export class CardService {
       return this.findAll(searchCriteria);
     }
 
-    const { cost, types } = searchCriteria;
+    const { cost, types, expansions } = searchCriteria;
 
     const searchTerm = searchCriteria.searchTerm.toLowerCase();
     const searchTermCondition = [
@@ -84,6 +89,10 @@ export class CardService {
       };
     });
 
+    const expansionsCondition = {
+      expansionId: { [Op.in]: expansions },
+    };
+
     const include: Includeable[] = this.getAssociations(attributes);
 
     return await this.cardModel.findAll({
@@ -91,6 +100,7 @@ export class CardService {
         Sequelize.or(...searchTermCondition),
         cost.length ? Sequelize.or(...costCondition) : [],
         types.length ? Sequelize.or(...typesCondition) : [],
+        expansions.length ? expansionsCondition : [],
       ]),
       offset: skip,
       limit: take,

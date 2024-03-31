@@ -11,4 +11,7 @@ export class SearchCardsArgs extends RetrieveArgs {
 
   @Field(() => [String])
   types = [];
+
+  @Field(() => [Int])
+  expansions = [];
 }
