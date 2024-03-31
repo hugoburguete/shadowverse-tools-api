@@ -1,9 +1,7 @@
 {
-  "name": "nest-typescript-starter",
-  "private": true,
+  "name": "shadowverse-tools-api",
   "version": "1.0.0",
-  "description": "Nest TypeScript starter repository",
-  "license": "MIT",
+  "description": "The API for the tools used manage Shadowverse Evolve related tasks",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
