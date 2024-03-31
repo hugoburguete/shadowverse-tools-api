@@ -12,7 +12,7 @@ export class CardResolver {
   constructor(private readonly cardService: CardService) {}
 
   @Query(() => [Card], { name: 'cards' })
-  async searchCards(
+  async findAll(
     @Args() searchCardsArgs: FindAllCardsArgs,
     @Fields() attributes: ParsedField,
   ): Promise<Card[]> {
