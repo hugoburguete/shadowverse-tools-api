@@ -27,7 +27,7 @@ describe('CardService', () => {
   });
 
   describe('findAll', () => {
-    it('should return all expansions', async () => {
+    it('should return all cards', async () => {
       const args = new FindAllCardsArgs();
       args.attributes = {
         fields: ['id'],
@@ -37,7 +37,7 @@ describe('CardService', () => {
       expect(result.length).toBe(2);
     });
 
-    it('should return a result with filtered expansions', async () => {
+    it('should return a result with filtered cards', async () => {
       const args = new FindAllCardsArgs();
       args.searchTerm = 'asd';
       args.attributes = {
