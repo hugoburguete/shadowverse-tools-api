@@ -6,7 +6,7 @@ import { SequelizeModule, SequelizeModuleOptions } from '@nestjs/sequelize';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CardsModule } from './card/card.module';
-import { Card } from './card/entities/card.entities';
+import { Card } from './card/entities/card.entity';
 import { Expansion } from './expansion/entities/expansion.entity';
 import { ExpansionModule } from './expansion/expansion.module';
 

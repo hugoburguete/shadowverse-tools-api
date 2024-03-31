@@ -4,7 +4,7 @@ import { Includeable, Op, Sequelize } from 'sequelize';
 import { Expansion } from 'src/expansion/entities/expansion.entity';
 import { ParsedField } from 'src/utils/graphql/decorators/fields.decorator';
 import { FindAllCardsArgs } from './dto/find-all-cards.args';
-import { Card } from './entities/card.entities';
+import { Card } from './entities/card.entity';
 
 @Injectable()
 export class CardService {

@@ -5,7 +5,7 @@ import {
 } from 'src/utils/graphql/decorators/fields.decorator';
 import { CardService } from './card.service';
 import { FindAllCardsArgs } from './dto/find-all-cards.args';
-import { Card } from './entities/card.entities';
+import { Card } from './entities/card.entity';
 
 @Resolver('Card')
 export class CardResolver {
