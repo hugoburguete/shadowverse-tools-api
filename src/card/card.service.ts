@@ -3,8 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Includeable, Op, Sequelize } from 'sequelize';
 import { Expansion } from 'src/expansion/entities/expansion.entity';
 import { ParsedField } from 'src/utils/graphql/decorators/fields.decorator';
-import { FindAllCardsArgs } from './dto/find-all.args';
-import { SearchCardsArgs } from './dto/search.args';
+import { FindAllCardsArgs } from './dto/find-all-cards.args';
 import { Card } from './entities/card.entities';
 
 @Injectable()
@@ -15,26 +14,6 @@ export class CardService {
   ) {}
 
   /**
-   * Retrieves all cards
-   */
-  async findAll(
-    {
-      attributes: attrs,
-      skip,
-      take,
-    }: FindAllCardsArgs = new FindAllCardsArgs(),
-  ): Promise<Card[]> {
-    const include: Includeable[] = this.getAssociations(attrs);
-
-    return await this.cardModel.findAll({
-      offset: skip,
-      limit: take,
-      attributes: attrs.fields,
-      include,
-    });
-  }
-
-  /**
    * Helper function that determines if a search is completely empty
    */
   private isEmptySearch({
@@ -42,7 +21,7 @@ export class CardService {
     cost,
     types,
     expansions,
-  }: SearchCardsArgs): boolean {
+  }: FindAllCardsArgs): boolean {
     return !searchTerm && !cost.length && !types.length && !expansions.length;
   }
 
@@ -52,12 +31,20 @@ export class CardService {
    * @param searchCriteria Search options
    * @returns the card results that match the search criteria
    */
-  async searchCards(
-    searchCriteria: SearchCardsArgs = new SearchCardsArgs(),
+  async findAll(
+    searchCriteria: FindAllCardsArgs = new FindAllCardsArgs(),
   ): Promise<Card[]> {
     const { skip, take, attributes } = searchCriteria;
+
+    const include: Includeable[] = this.getAssociations(attributes);
+
     if (this.isEmptySearch(searchCriteria)) {
-      return this.findAll(searchCriteria);
+      return await this.cardModel.findAll({
+        offset: skip,
+        limit: take,
+        attributes: attributes.fields,
+        include,
+      });
     }
 
     const { cost, types, expansions } = searchCriteria;
@@ -92,8 +79,6 @@ export class CardService {
     const expansionsCondition = {
       expansionId: { [Op.in]: expansions },
     };
-
-    const include: Includeable[] = this.getAssociations(attributes);
 
     return await this.cardModel.findAll({
       where: Sequelize.and([
