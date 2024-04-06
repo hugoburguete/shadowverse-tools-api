@@ -7,9 +7,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CardsModule } from './card/card.module';
 import { Card } from './card/entities/card.entity';
-import { Rarity } from './card/entities/rarity.entity';
 import { Expansion } from './expansion/entities/expansion.entity';
 import { ExpansionModule } from './expansion/expansion.module';
+import { Rarity } from './rarity/entities/rarity.entity';
+import { RarityModule } from './rarity/rarity.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ExpansionModule } from './expansion/expansion.module';
     } as SequelizeModuleOptions),
     CardsModule,
     ExpansionModule,
+    RarityModule,
   ],
   controllers: [AppController],
   providers: [AppService],

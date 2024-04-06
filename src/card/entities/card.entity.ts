@@ -7,7 +7,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Expansion } from 'src/expansion/entities/expansion.entity';
-import { Rarity } from './rarity.entity';
+import { Rarity } from '../../rarity/entities/rarity.entity';
 
 export type CardType = 'Follower' | 'Follower / Evolve' | 'Spell' | 'Leader';
 

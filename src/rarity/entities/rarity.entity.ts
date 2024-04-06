@@ -1,6 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Column, HasMany, Model, Table } from 'sequelize-typescript';
-import { Card } from './card.entity';
+import { Card } from '../../card/entities/card.entity';
 
 @ObjectType()
 @Table({ timestamps: false })

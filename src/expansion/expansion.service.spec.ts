@@ -47,20 +47,20 @@ describe('ExpansionService', () => {
       const result = await service.findAll(args);
       expect(result.length).toBe(1);
     });
+  });
 
-    describe('findOne', () => {
-      it('should return the queried expansion', async () => {
-        const expansionId = 1;
-        const result = await service.findOne(expansionId);
+  describe('findOne', () => {
+    it('should return the queried expansion', async () => {
+      const expansionId = 1;
+      const result = await service.findOne(expansionId);
 
-        expect(result.id).toStrictEqual(expansionId);
-      });
+      expect(result.id).toStrictEqual(expansionId);
+    });
 
-      it('should return the queried expansion', async () => {
-        const expansionId = 3;
-        const result = await service.findOne(expansionId);
-        expect(result).toBe(null);
-      });
+    it('should return the queried expansion', async () => {
+      const expansionId = 3;
+      const result = await service.findOne(expansionId);
+      expect(result).toBe(null);
     });
   });
 });

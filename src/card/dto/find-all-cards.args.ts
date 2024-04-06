@@ -1,6 +1,6 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
+import { RetrieveArgs } from 'src/base/dto/retrieve.args';
 import { CardType } from '../entities/card.entity';
-import { RetrieveArgs } from './retrieve.args';
 
 @ArgsType()
 export class FindAllCardsArgs extends RetrieveArgs {
