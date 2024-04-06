@@ -22,8 +22,15 @@ export class CardService {
     cost,
     types,
     expansions,
+    rarities,
   }: FindAllCardsArgs): boolean {
-    return !searchTerm && !cost.length && !types.length && !expansions.length;
+    return (
+      !searchTerm &&
+      !cost.length &&
+      !types.length &&
+      !expansions.length &&
+      !rarities.length
+    );
   }
 
   /**
