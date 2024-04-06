@@ -14,7 +14,8 @@ API for the shadowverse tools app using the [NestJS framework](docs.nestjs.com).
 $ docker-compose -f docker-compose-dev.yml up
 
 # Querying the database
-$ docker exec -it shadowverse-tools-db mysql -p -e 'SELECT * from cards' shadowverse-tools-db
+$ docker exec -it shadowverse-tools-db bash -l
+$ > mysql -u {{ USERNAME }} -p shadowverse-tools-db
 
 # Running NestJS CLI commands
 $ docker exec -it shadowverse-tools-api nest g [command] [name]
