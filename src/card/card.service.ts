@@ -48,7 +48,7 @@ export class CardService {
       });
     }
 
-    const { cost, types, expansions } = searchCriteria;
+    const { cost, types, expansions, rarities } = searchCriteria;
 
     const searchTerm = searchCriteria.searchTerm.toLowerCase();
     const searchTermCondition = [
@@ -81,12 +81,17 @@ export class CardService {
       expansionId: { [Op.in]: expansions },
     };
 
+    const raritiesCondition = {
+      rarityId: { [Op.in]: rarities },
+    };
+
     return await this.cardModel.findAll({
       where: Sequelize.and([
         Sequelize.or(...searchTermCondition),
         cost.length ? Sequelize.or(...costCondition) : [],
         types.length ? Sequelize.or(...typesCondition) : [],
         expansions.length ? expansionsCondition : [],
+        rarities.length ? raritiesCondition : [],
       ]),
       offset: skip,
       limit: take,

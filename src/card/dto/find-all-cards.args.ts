@@ -15,4 +15,7 @@ export class FindAllCardsArgs extends RetrieveArgs {
 
   @Field(() => [Int])
   expansions: number[] = [];
+
+  @Field(() => [Int])
+  rarities: number[] = [];
 }
