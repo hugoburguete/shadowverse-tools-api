@@ -5,6 +5,7 @@ import { Expansion } from 'src/expansion/entities/expansion.entity';
 import { ParsedField } from 'src/utils/graphql/decorators/fields.decorator';
 import { FindAllCardsArgs } from './dto/find-all-cards.args';
 import { Card } from './entities/card.entity';
+import { Rarity } from './entities/rarity.entity';
 
 @Injectable()
 export class CardService {
@@ -100,11 +101,20 @@ export class CardService {
     if (expansionAttr) {
       include.push(this.getExpansionAssociation(expansionAttr));
     }
+    const rarityAttr = attributes.relations.rarity;
+    if (rarityAttr) {
+      include.push(this.getRarityAssociation(rarityAttr));
+    }
     return include;
   };
 
   private getExpansionAssociation = (attributes: ParsedField) => ({
     model: Expansion,
+    attributes: attributes.fields,
+  });
+
+  private getRarityAssociation = (attributes: ParsedField) => ({
+    model: Rarity,
     attributes: attributes.fields,
   });
 }

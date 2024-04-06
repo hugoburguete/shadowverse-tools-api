@@ -7,10 +7,13 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Expansion } from 'src/expansion/entities/expansion.entity';
+import { Rarity } from './rarity.entity';
+
+export type CardType = 'Follower' | 'Follower / Evolve' | 'Spell' | 'Leader';
 
 @ObjectType()
 @Table({ timestamps: false })
-export class Card extends Model {
+export class Card extends Model<Card> {
   @Field(() => String)
   @Column
   cardId: string;
@@ -30,7 +33,7 @@ export class Card extends Model {
 
   @Field(() => String)
   @Column
-  type: string;
+  type: CardType;
 
   @Field(() => String)
   @Column
@@ -56,7 +59,12 @@ export class Card extends Model {
   @Column
   image: string;
 
-  @Field(() => String, { nullable: true })
+  @Field(() => Int)
+  @ForeignKey(() => Rarity)
   @Column
-  rarity?: string;
+  rarityId?: number;
+
+  @Field(() => Rarity)
+  @BelongsTo(() => Rarity)
+  rarity: Rarity;
 }

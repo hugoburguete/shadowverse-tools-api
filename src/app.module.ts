@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CardsModule } from './card/card.module';
 import { Card } from './card/entities/card.entity';
+import { Rarity } from './card/entities/rarity.entity';
 import { Expansion } from './expansion/entities/expansion.entity';
 import { ExpansionModule } from './expansion/expansion.module';
 
@@ -29,7 +30,7 @@ import { ExpansionModule } from './expansion/expansion.module';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_DB,
-      models: [Card, Expansion],
+      models: [Card, Expansion, Rarity],
     } as SequelizeModuleOptions),
     CardsModule,
     ExpansionModule,

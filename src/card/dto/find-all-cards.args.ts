@@ -1,17 +1,18 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
+import { CardType } from '../entities/card.entity';
 import { RetrieveArgs } from './retrieve.args';
 
 @ArgsType()
 export class FindAllCardsArgs extends RetrieveArgs {
   @Field(() => String)
-  searchTerm = '';
+  searchTerm: string = '';
 
   @Field(() => [Int])
-  cost = [];
+  cost: number[] = [];
 
   @Field(() => [String])
-  types = [];
+  types: CardType[] = [];
 
   @Field(() => [Int])
-  expansions = [];
+  expansions: number[] = [];
 }
