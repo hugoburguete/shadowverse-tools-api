@@ -1,6 +1,6 @@
+import { NotFoundException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
-import { GraphQLError } from 'graphql';
 import expansionModelFactory from 'src/utils/test/expansion.model.factory';
 import { FindAllExpansionsArgs } from './dto/find-all-expansions.args';
 import { Expansion } from './entities/expansion.entity';
@@ -58,12 +58,12 @@ describe('ExpansionResolver', () => {
       expect(result.id).toStrictEqual(expansionId);
     });
 
-    it('should return the queried expansion', async () => {
+    it('should fail if no expansion is found', async () => {
       const expansionId = 3;
       const t = async () => {
         await resolver.findOne(expansionId);
       };
-      expect(t).rejects.toThrow(GraphQLError);
+      expect(t).rejects.toThrow(NotFoundException);
     });
   });
 });

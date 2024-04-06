@@ -1,5 +1,5 @@
+import { NotFoundException } from '@nestjs/common';
 import { Args, Int, Query, Resolver } from '@nestjs/graphql';
-import { GraphQLError } from 'graphql';
 import {
   Fields,
   ParsedField,
@@ -25,11 +25,7 @@ export class ExpansionResolver {
   async findOne(@Args('id', { type: () => Int }) id: number) {
     const expansion = await this.expansionService.findOne(id);
     if (!expansion) {
-      throw new GraphQLError('Resource not found', {
-        extensions: {
-          code: 'RESOURCE_NOT_FOUND',
-        },
-      });
+      throw new NotFoundException(id);
     }
     return expansion;
   }

@@ -55,6 +55,8 @@ module.exports = {
         { rarity: rarity.acronym },
       );
     });
+
+    await queryInterface.removeColumn('cards', 'rarity');
   },
 
   async down(queryInterface) {

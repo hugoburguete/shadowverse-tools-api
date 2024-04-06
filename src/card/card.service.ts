@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Includeable, Op, Sequelize } from 'sequelize';
+import { Class } from 'src/class/entities/class.entity';
 import { Expansion } from 'src/expansion/entities/expansion.entity';
 import { ParsedField } from 'src/utils/graphql/decorators/fields.decorator';
 import { Rarity } from '../rarity/entities/rarity.entity';
@@ -23,13 +24,15 @@ export class CardService {
     types,
     expansions,
     rarities,
+    classes,
   }: FindAllCardsArgs): boolean {
     return (
       !searchTerm &&
       !cost.length &&
       !types.length &&
       !expansions.length &&
-      !rarities.length
+      !rarities.length &&
+      !classes.length
     );
   }
 
@@ -55,7 +58,7 @@ export class CardService {
       });
     }
 
-    const { cost, types, expansions, rarities } = searchCriteria;
+    const { cost, types, expansions, rarities, classes } = searchCriteria;
 
     const searchTerm = searchCriteria.searchTerm.toLowerCase();
     const searchTermCondition = [
@@ -63,9 +66,6 @@ export class CardService {
         name: {
           [Op.substring]: searchTerm,
         },
-      },
-      {
-        class: { [Op.substring]: searchTerm },
       },
       {
         trait: { [Op.substring]: searchTerm },
@@ -92,6 +92,10 @@ export class CardService {
       rarityId: { [Op.in]: rarities },
     };
 
+    const classesCondition = {
+      classId: { [Op.in]: classes },
+    };
+
     return await this.cardModel.findAll({
       where: Sequelize.and([
         Sequelize.or(...searchTermCondition),
@@ -99,6 +103,7 @@ export class CardService {
         types.length ? Sequelize.or(...typesCondition) : [],
         expansions.length ? expansionsCondition : [],
         rarities.length ? raritiesCondition : [],
+        classes.length ? classesCondition : [],
       ]),
       offset: skip,
       limit: take,
@@ -117,6 +122,10 @@ export class CardService {
     if (rarityAttr) {
       include.push(this.getRarityAssociation(rarityAttr));
     }
+    const classAttr = attributes.relations.class;
+    if (classAttr) {
+      include.push(this.getClassAssociation(classAttr));
+    }
     return include;
   };
 
@@ -127,6 +136,11 @@ export class CardService {
 
   private getRarityAssociation = (attributes: ParsedField) => ({
     model: Rarity,
+    attributes: attributes.fields,
+  });
+
+  private getClassAssociation = (attributes: ParsedField) => ({
+    model: Class,
     attributes: attributes.fields,
   });
 }

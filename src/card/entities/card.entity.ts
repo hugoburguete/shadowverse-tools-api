@@ -6,6 +6,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
+import { Class } from 'src/class/entities/class.entity';
 import { Expansion } from 'src/expansion/entities/expansion.entity';
 import { Rarity } from '../../rarity/entities/rarity.entity';
 
@@ -35,9 +36,14 @@ export class Card extends Model<Card> {
   @Column
   type: CardType;
 
-  @Field(() => String)
+  @Field(() => Int)
+  @ForeignKey(() => Class)
   @Column
-  class: string;
+  classId?: number;
+
+  @Field(() => Class)
+  @BelongsTo(() => Class)
+  class?: Class;
 
   @Field({ nullable: true })
   @Column
