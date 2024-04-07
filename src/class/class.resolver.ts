@@ -8,6 +8,7 @@ import {
   ParsedField,
 } from 'src/utils/graphql/decorators/fields.decorator';
 import { ClassService } from './class.service';
+import { FindAllClassesArgs } from './dto/find-all-classes.args';
 import { FindOneClassArgs } from './dto/find-one-class.args';
 import { Class } from './entities/class.entity';
 
@@ -33,14 +34,36 @@ export class ClassResolver {
     if (!clax) {
       throw new NotFoundException(id);
     }
+    return await this.addRelations(id, clax, attributes);
+  }
 
-    if (attributes.relations['cards']) {
+  @Query(() => [Class], { name: 'classes' })
+  async findAll(@Fields() attributes: ParsedField) {
+    const args = new FindAllClassesArgs();
+    attributes.fields.push('id');
+    args.attributes = attributes;
+    const classes = await this.classService.findAll(args);
+
+    for (let idx = 0; idx < classes.length; idx++) {
+      const clax = classes[idx];
+      classes[idx] = await this.addRelations(clax.id, clax, attributes);
+    }
+    return classes;
+  }
+
+  private addRelations = async (
+    classId: number,
+    clax: Class,
+    attributes: ParsedField,
+  ): Promise<Class> => {
+    const cardsRelation = attributes.relations['cards'];
+    if (cardsRelation) {
       const args = new FindAllCardsArgs();
       // TODO: remove hardcoded neutral id
-      args.classes = [id, 6];
-      args.attributes = attributes.relations['cards'];
+      args.classes = [classId, 6];
+      args.attributes = cardsRelation;
       clax.cards = await this.cardService.findAll(args);
     }
-    return clax;
-  }
+    return Promise.resolve(clax);
+  };
 }

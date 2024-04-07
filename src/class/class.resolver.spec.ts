@@ -53,4 +53,14 @@ describe('ClassResolver', () => {
       expect(t).rejects.toThrow(NotFoundException);
     });
   });
+
+  describe('findAll', () => {
+    it('should return all card classes', async () => {
+      const result = await resolver.findAll({
+        fields: ['id'],
+        relations: {},
+      });
+      expect(result.length).toBe(2);
+    });
+  });
 });
