@@ -3,10 +3,7 @@ import { Args, Int, Query, Resolver } from '@nestjs/graphql';
 import { CardService } from 'src/card/card.service';
 import { FindAllCardsArgs } from 'src/card/dto/find-all-cards.args';
 import { Card } from 'src/card/entities/card.entity';
-import {
-  Fields,
-  ParsedField,
-} from 'src/utils/graphql/decorators/fields.decorator';
+import { Fields, ParsedField } from 'src/common/decorators/fields.decorator';
 import { ClassService } from './class.service';
 import { FindAllClassesArgs } from './dto/find-all-classes.args';
 import { FindOneClassArgs } from './dto/find-one-class.args';

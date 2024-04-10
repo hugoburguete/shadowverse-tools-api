@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Includeable, Op, Sequelize } from 'sequelize';
 import { Card } from 'src/card/entities/card.entity';
-import { ParsedField } from 'src/utils/graphql/decorators/fields.decorator';
+import { ParsedField } from 'src/common/decorators/fields.decorator';
 import { FindAllExpansionsArgs } from './dto/find-all-expansions.args';
 import { Expansion } from './entities/expansion.entity';
 

@@ -1,9 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { Args, Int, Query, Resolver } from '@nestjs/graphql';
-import {
-  Fields,
-  ParsedField,
-} from 'src/utils/graphql/decorators/fields.decorator';
+import { Fields, ParsedField } from 'src/common/decorators/fields.decorator';
 import { FindAllExpansionsArgs } from './dto/find-all-expansions.args';
 import { Expansion } from './entities/expansion.entity';
 import { ExpansionService } from './expansion.service';

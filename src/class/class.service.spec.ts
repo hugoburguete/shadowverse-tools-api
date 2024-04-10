@@ -1,6 +1,6 @@
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
-import ClassModelFactory from 'src/utils/test/class.model.factory';
+import ClassModelFactory from 'src/common/test-utils/class.model.factory';
 import { ClassService } from './class.service';
 import { FindAllClassesArgs } from './dto/find-all-classes.args';
 import { FindOneClassArgs } from './dto/find-one-class.args';

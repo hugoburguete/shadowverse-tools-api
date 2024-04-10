@@ -1,8 +1,5 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import {
-  Fields,
-  ParsedField,
-} from 'src/utils/graphql/decorators/fields.decorator';
+import { Fields, ParsedField } from 'src/common/decorators/fields.decorator';
 import { CardService } from './card.service';
 import { FindAllCardsArgs } from './dto/find-all-cards.args';
 import { Card } from './entities/card.entity';

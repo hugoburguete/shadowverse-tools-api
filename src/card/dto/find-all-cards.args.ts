@@ -1,5 +1,6 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
 import { RetrieveArgs } from 'src/base/dto/retrieve.args';
+import { RetrieveArgs } from 'src/common/dto/retrieve.args';
 import { CardType } from '../entities/card.entity';
 
 @ArgsType()

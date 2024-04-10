@@ -1,6 +1,6 @@
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
-import CardModelFactory from 'src/utils/test/card.model.factory';
+import CardModelFactory from 'src/common/test-utils/card.model.factory';
 import { CardResolver } from './card.resolver';
 import { CardService } from './card.service';
 import { FindAllCardsArgs } from './dto/find-all-cards.args';

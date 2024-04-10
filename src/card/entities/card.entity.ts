@@ -14,7 +14,7 @@ export type CardType = 'Follower' | 'Follower / Evolve' | 'Spell' | 'Leader';
 
 @ObjectType()
 @Table({ timestamps: false })
-export class Card extends Model<Card> {
+export class Card extends Model<Card, Partial<Card>> {
   @Field(() => String)
   @Column
   cardId: string;
@@ -26,7 +26,7 @@ export class Card extends Model<Card> {
 
   @Field(() => Expansion)
   @BelongsTo(() => Expansion)
-  expansion: Expansion;
+  expansion?: Expansion;
 
   @Field(() => String)
   @Column
@@ -72,5 +72,5 @@ export class Card extends Model<Card> {
 
   @Field(() => Rarity)
   @BelongsTo(() => Rarity)
-  rarity: Rarity;
+  rarity?: Rarity;
 }

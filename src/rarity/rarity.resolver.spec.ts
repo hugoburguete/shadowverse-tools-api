@@ -1,6 +1,6 @@
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
-import rarityModelFactory from 'src/utils/test/rarity.model.factory';
+import rarityModelFactory from 'src/common/test-utils/rarity.model.factory';
 import { FindAllRaritiesArgs } from './dto/find-all-rarities.args';
 import { Rarity } from './entities/rarity.entity';
 import { RarityResolver } from './rarity.resolver';

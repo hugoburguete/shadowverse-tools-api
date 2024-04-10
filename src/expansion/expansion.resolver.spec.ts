@@ -1,7 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
-import expansionModelFactory from 'src/utils/test/expansion.model.factory';
+import expansionModelFactory from 'src/common/test-utils/expansion.model.factory';
 import { FindAllExpansionsArgs } from './dto/find-all-expansions.args';
 import { Expansion } from './entities/expansion.entity';
 import { ExpansionResolver } from './expansion.resolver';

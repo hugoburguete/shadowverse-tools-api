@@ -1,8 +1,5 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import {
-  Fields,
-  ParsedField,
-} from 'src/utils/graphql/decorators/fields.decorator';
+import { Fields, ParsedField } from 'src/common/decorators/fields.decorator';
 import { FindAllRaritiesArgs } from './dto/find-all-rarities.args';
 import { Rarity } from './entities/rarity.entity';
 import { RarityService } from './rarity.service';
