@@ -1,9 +1,9 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
-import { RetrieveArgs } from 'src/common/dto/retrieve.args';
+import { PaginatedRetrieveArgs } from 'src/common/dto/paginated-retrieve.args';
 import { CardType } from '../entities/card.entity';
 
 @ArgsType()
-export class FindAllCardsArgs extends RetrieveArgs {
+export class FindAllCardsArgs extends PaginatedRetrieveArgs {
   @Field(() => String, {
     description:
       'Provide a search term to filter the card result. This will search for cards with a similar name or trait as the search term passed through.',
@@ -30,10 +30,4 @@ export class FindAllCardsArgs extends RetrieveArgs {
 
   @Field(() => [Int])
   classes: number[] = [];
-
-  @Field(() => String, { nullable: true })
-  after?: string;
-
-  @Field(() => String, { nullable: true })
-  before?: string;
 }

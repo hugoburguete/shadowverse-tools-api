@@ -1,28 +1,19 @@
-import { FindOptions } from 'sequelize';
-import { Class } from 'src/class/entities/class.entity';
-
 const ClassModelFactory = {
   findOne: jest.fn(),
-  findAll: jest.fn(),
+  findAndCountAll: jest.fn(),
 };
-ClassModelFactory.findAll.mockImplementation((args: FindOptions<Class>) => {
-  // Dummy filtering
-  if (args.where) {
-    return [
+ClassModelFactory.findAndCountAll.mockImplementation(() => {
+  return {
+    count: 2,
+    rows: [
       {
         id: 1,
       },
-    ];
-  }
-
-  return [
-    {
-      id: 1,
-    },
-    {
-      id: 2,
-    },
-  ];
+      {
+        id: 2,
+      },
+    ],
+  };
 });
 
 ClassModelFactory.findOne.mockImplementation((args) => {

@@ -1,6 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, HasMany, Model, Table } from 'sequelize-typescript';
-import { Card } from 'src/card/entities/card.entity';
+import { Column, Model, Table } from 'sequelize-typescript';
 
 @ObjectType()
 @Table({ timestamps: false, tableName: 'classes' })
@@ -16,10 +15,4 @@ export class Class extends Model {
   @Field(() => String, { description: 'The class name.' })
   @Column
   name: string;
-
-  @Field(() => [Card], {
-    description: 'The cards within this class.',
-  })
-  @HasMany(() => Card)
-  cards: Card[];
 }

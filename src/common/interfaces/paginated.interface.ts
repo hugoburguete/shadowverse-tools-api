@@ -33,7 +33,7 @@ export function Paginated<T>(
     node: T;
   }
 
-  @ObjectType('PageInfo')
+  @ObjectType(`${className}PageInfo`)
   abstract class PageInfoType implements IPageInfoType {
     @Field(() => String, { nullable: true })
     startCursor?: ICursor;

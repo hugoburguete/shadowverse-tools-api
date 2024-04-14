@@ -1,7 +1,5 @@
 import { ArgsType } from '@nestjs/graphql';
-import { ParsedField } from 'src/common/decorators/fields.decorator';
+import { PaginatedRetrieveArgs } from 'src/common/dto/paginated-retrieve.args';
 
 @ArgsType()
-export class FindAllClassesArgs {
-  attributes: ParsedField;
-}
+export class FindAllClassesArgs extends PaginatedRetrieveArgs {}

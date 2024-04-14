@@ -48,8 +48,8 @@ describe('ClassService', () => {
         relations: {},
       };
       const result = await service.findAll(args);
-      expect(result.length).toBe(2);
-      expect(result[1].id).toBe(2);
+      expect(result.edges.length).toBe(2);
+      expect(result.edges[1].node.id).toBe(2);
     });
   });
 });

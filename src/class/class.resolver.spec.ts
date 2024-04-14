@@ -7,6 +7,7 @@ import CardModelFactory from 'src/common/test-utils/card.model.factory';
 import ClassModelFactory from 'src/common/test-utils/class.model.factory';
 import { ClassResolver } from './class.resolver';
 import { ClassService } from './class.service';
+import { FindAllClassesArgs } from './dto/find-all-classes.args';
 import { Class } from './entities/class.entity';
 
 describe('ClassResolver', () => {
@@ -56,11 +57,11 @@ describe('ClassResolver', () => {
 
   describe('findAll', () => {
     it('should return all card classes', async () => {
-      const result = await resolver.findAll({
+      const result = await resolver.findAll(new FindAllClassesArgs(), {
         fields: ['id'],
         relations: {},
       });
-      expect(result.length).toBe(2);
+      expect(result.edges.length).toBe(2);
     });
   });
 });

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Includeable, Op, Sequelize } from 'sequelize';
+import { Includeable, Op, Sequelize, WhereOptions } from 'sequelize';
 import { Class } from 'src/class/entities/class.entity';
 import { CursorService } from 'src/common/cursor.service';
 import { ParsedField } from 'src/common/decorators/fields.decorator';
@@ -57,7 +57,7 @@ export class CardService {
       searchCriteria;
     const cursorService = new CursorService();
 
-    let afterCondition;
+    let afterCondition: WhereOptions;
     if (after) {
       const { entityId } = cursorService.decodeCursor(after);
       afterCondition = {
