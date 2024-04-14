@@ -35,7 +35,7 @@ describe('CardResolver', () => {
         fields: ['id'],
         relations: {},
       });
-      expect(result.length).toBe(2);
+      expect(result.edges.length).toBe(2);
     });
 
     it('should return a result with filtered cards', async () => {
@@ -45,7 +45,7 @@ describe('CardResolver', () => {
         fields: ['id'],
         relations: {},
       });
-      expect(result.length).toBe(1);
+      expect(result.edges.length).toBe(1);
     });
   });
 });

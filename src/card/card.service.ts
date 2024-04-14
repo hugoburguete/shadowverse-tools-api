@@ -2,11 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Includeable, Op, Sequelize } from 'sequelize';
 import { Class } from 'src/class/entities/class.entity';
+import { CursorService } from 'src/common/cursor.service';
 import { ParsedField } from 'src/common/decorators/fields.decorator';
+import { IEdgeType } from 'src/common/interfaces/paginated.interface';
 import { Expansion } from 'src/expansion/entities/expansion.entity';
 import { Rarity } from '../rarity/entities/rarity.entity';
 import { FindAllCardsArgs } from './dto/find-all-cards.args';
 import { Card } from './entities/card.entity';
+import { PaginatedCards } from './entities/paginated-card.entity';
 
 @Injectable()
 export class CardService {
@@ -42,23 +45,27 @@ export class CardService {
    * @param searchCriteria Search options
    * @returns the card results that match the search criteria
    */
-  async findAll(
+  findAll = async (
     searchCriteria: FindAllCardsArgs = new FindAllCardsArgs(),
-  ): Promise<Card[]> {
-    const { skip, take, attributes } = searchCriteria;
-
-    const include: Includeable[] = this.getAssociations(attributes);
-
-    if (this.isEmptySearch(searchCriteria)) {
-      return await this.cardModel.findAll({
-        offset: skip,
-        limit: take,
-        attributes: attributes.fields,
-        include,
-      });
+  ): Promise<PaginatedCards> => {
+    if (!searchCriteria.attributes.fields.includes('id')) {
+      searchCriteria.attributes.fields.push('id');
     }
 
-    const { cost, types, expansions, rarities, classes } = searchCriteria;
+    const take = 25;
+    const { attributes, cost, types, expansions, rarities, classes, after } =
+      searchCriteria;
+    const cursorService = new CursorService();
+
+    let afterCondition;
+    if (after) {
+      const { entityId } = cursorService.decodeCursor(after);
+      afterCondition = {
+        id: {
+          [Op.gt]: entityId,
+        },
+      };
+    }
 
     const searchTerm = searchCriteria.searchTerm.toLowerCase();
     const searchTermCondition = [
@@ -96,21 +103,44 @@ export class CardService {
       classId: { [Op.in]: classes },
     };
 
-    return await this.cardModel.findAll({
-      where: Sequelize.and([
-        Sequelize.or(...searchTermCondition),
-        cost.length ? Sequelize.or(...costCondition) : [],
-        types.length ? Sequelize.or(...typesCondition) : [],
-        expansions.length ? expansionsCondition : [],
-        rarities.length ? raritiesCondition : [],
-        classes.length ? classesCondition : [],
-      ]),
-      offset: skip,
-      limit: take,
-      attributes: attributes.fields,
-      include,
+    const include: Includeable[] = this.getAssociations(attributes);
+    const { rows: cards, count: totalCount } =
+      await this.cardModel.findAndCountAll({
+        where: Sequelize.and([
+          Sequelize.or(...searchTermCondition),
+          cost.length ? Sequelize.or(...costCondition) : [],
+          types.length ? Sequelize.or(...typesCondition) : [],
+          expansions.length ? expansionsCondition : [],
+          rarities.length ? raritiesCondition : [],
+          classes.length ? classesCondition : [],
+          after ? afterCondition : [],
+        ]),
+        limit: take,
+        attributes: attributes.fields,
+        include,
+      });
+
+    const edges: IEdgeType<Card>[] = cards.map((card) => {
+      const cursor = cursorService.generateCursor({
+        entityId: card.id,
+      });
+      return {
+        node: card,
+        cursor: cursor,
+      };
     });
-  }
+
+    const startCursor = edges.length > 0 ? edges[0].cursor : null;
+    const endCursor = edges.length > 0 ? edges[edges.length - 1].cursor : null;
+
+    const hasNextPage = take + cards.length < totalCount;
+
+    return {
+      totalCount,
+      edges,
+      pageInfo: { startCursor, endCursor, hasNextPage },
+    };
+  };
 
   private getAssociations = (attributes: ParsedField): Includeable[] => {
     const include = [];

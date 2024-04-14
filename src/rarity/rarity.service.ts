@@ -9,14 +9,9 @@ export class RarityService {
     @InjectModel(Rarity)
     private readonly expansionModel: typeof Rarity,
   ) {}
-  async findAll({
-    attributes: attrs,
-    skip,
-    take,
-  }: FindAllRaritiesArgs): Promise<Rarity[]> {
+  async findAll({ attributes: attrs }: FindAllRaritiesArgs): Promise<Rarity[]> {
     return await this.expansionModel.findAll({
-      offset: skip,
-      limit: take,
+      limit: 25,
       attributes: attrs.fields,
     });
   }

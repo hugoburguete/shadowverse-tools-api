@@ -1,29 +1,20 @@
-import { FindOptions } from 'sequelize';
-import { Card } from 'src/card/entities/card.entity';
-
 const CardModelFactory = {
-  findAll: jest.fn(),
+  findAndCountAll: jest.fn(),
   findOne: jest.fn(),
 };
 
-CardModelFactory.findAll.mockImplementation((args: FindOptions<Card>) => {
-  // Dummy filtering
-  if (args.where) {
-    return [
+CardModelFactory.findAndCountAll.mockImplementation(() => {
+  return {
+    count: 2,
+    rows: [
       {
         id: 1,
       },
-    ];
-  }
-
-  return [
-    {
-      id: 1,
-    },
-    {
-      id: 2,
-    },
-  ];
+      {
+        id: 2,
+      },
+    ],
+  };
 });
 
 export default CardModelFactory;

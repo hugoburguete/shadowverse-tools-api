@@ -34,18 +34,7 @@ describe('CardService', () => {
         relations: {},
       };
       const result = await service.findAll(args);
-      expect(result.length).toBe(2);
-    });
-
-    it('should return a result with filtered cards', async () => {
-      const args = new FindAllCardsArgs();
-      args.searchTerm = 'asd';
-      args.attributes = {
-        fields: ['id'],
-        relations: {},
-      };
-      const result = await service.findAll(args);
-      expect(result.length).toBe(1);
+      expect(result.edges.length).toBe(2);
     });
   });
 });

@@ -16,7 +16,6 @@ export class ExpansionService {
     attributes: attrs,
     ids,
     slugs,
-    skip,
     take,
   }: FindAllExpansionsArgs): Promise<Expansion[]> {
     const include: Includeable[] = [];
@@ -46,7 +45,6 @@ export class ExpansionService {
     const whereOptions = whereArgs.length ? Sequelize.or(whereArgs) : null;
     return await this.expansionModel.findAll({
       where: whereOptions,
-      offset: skip,
       limit: take,
       attributes: attrs.fields,
       include,

@@ -2,18 +2,21 @@ import { Args, Query, Resolver } from '@nestjs/graphql';
 import { Fields, ParsedField } from 'src/common/decorators/fields.decorator';
 import { CardService } from './card.service';
 import { FindAllCardsArgs } from './dto/find-all-cards.args';
-import { Card } from './entities/card.entity';
+import { PaginatedCards } from './entities/paginated-card.entity';
 
 @Resolver('Card')
 export class CardResolver {
   constructor(private readonly cardService: CardService) {}
 
-  @Query(() => [Card], { name: 'cards' })
+  @Query(() => PaginatedCards, { name: 'cards' })
   async findAll(
-    @Args() searchCardsArgs: FindAllCardsArgs,
+    @Args({ description: 'Arguments for filtered cards.' })
+    searchCardsArgs: FindAllCardsArgs,
     @Fields() attributes: ParsedField,
-  ): Promise<Card[]> {
-    searchCardsArgs.attributes = attributes;
+  ): Promise<PaginatedCards> {
+    searchCardsArgs.attributes = attributes.relations['edges']?.relations[
+      'node'
+    ] || { fields: ['id'], relations: {} };
     return this.cardService.findAll(searchCardsArgs);
   }
 }

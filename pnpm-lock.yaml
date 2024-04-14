@@ -41,9 +41,6 @@ dependencies:
   mysql2:
     specifier: ^3.9.2
     version: 3.9.2
-  reflect-metadata:
-    specifier: ^0.2.1
-    version: 0.2.1
   rxjs:
     specifier: ^7.8.1
     version: 7.8.1
@@ -109,6 +106,9 @@ devDependencies:
   prettier:
     specifier: ^3.2.5
     version: 3.2.5
+  reflect-metadata:
+    specifier: ^0.2.1
+    version: 0.2.1
   source-map-support:
     specifier: ^0.5.21
     version: 0.5.21

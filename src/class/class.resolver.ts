@@ -59,7 +59,6 @@ export class ClassResolver {
       // TODO: remove hardcoded neutral id
       args.classes = [classId, 6];
       args.attributes = cardsRelation;
-      clax.cards = await this.cardService.findAll(args);
     }
     return Promise.resolve(clax);
   };

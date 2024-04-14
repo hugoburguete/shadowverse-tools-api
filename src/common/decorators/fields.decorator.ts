@@ -22,8 +22,8 @@ export const Fields = () => {
   return createParamDecorator<unknown, ExecutionContext>(fieldsFactory)();
 };
 
-export type ParsedField = {
-  fields: string[];
+export type ParsedField<T = string> = {
+  fields: T[];
   relations: Record<string, ParsedField>;
 };
 
