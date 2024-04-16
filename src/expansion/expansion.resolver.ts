@@ -3,18 +3,22 @@ import { Args, Int, Query, Resolver } from '@nestjs/graphql';
 import { Fields, ParsedField } from 'src/common/decorators/fields.decorator';
 import { FindAllExpansionsArgs } from './dto/find-all-expansions.args';
 import { Expansion } from './entities/expansion.entity';
+import { PaginatedExpansions } from './entities/paginated-expansions.entity';
 import { ExpansionService } from './expansion.service';
 
 @Resolver(() => Expansion)
 export class ExpansionResolver {
   constructor(private readonly expansionService: ExpansionService) {}
 
-  @Query(() => [Expansion], { name: 'expansions' })
+  @Query(() => PaginatedExpansions, { name: 'expansions' })
   async findAll(
     @Args() args: FindAllExpansionsArgs,
     @Fields() attributes: ParsedField,
   ) {
-    args.attributes = attributes;
+    args.attributes = attributes.relations['edges']?.relations['node'] || {
+      fields: ['id'],
+      relations: {},
+    };
     return await this.expansionService.findAll(args);
   }
 
