@@ -104,21 +104,27 @@ export class CardService {
     };
 
     const include: Includeable[] = this.getAssociations(attributes);
-    const { rows: cards, count: totalCount } =
-      await this.cardModel.findAndCountAll({
-        where: Sequelize.and([
-          Sequelize.or(...searchTermCondition),
-          cost.length ? Sequelize.or(...costCondition) : [],
-          types.length ? Sequelize.or(...typesCondition) : [],
-          expansions.length ? expansionsCondition : [],
-          rarities.length ? raritiesCondition : [],
-          classes.length ? classesCondition : [],
-          after ? afterCondition : [],
-        ]),
-        limit: take,
-        attributes: attributes.fields,
-        include,
-      });
+    const baseConditions = [
+      Sequelize.or(...searchTermCondition),
+      cost.length ? Sequelize.or(...costCondition) : [],
+      types.length ? Sequelize.or(...typesCondition) : [],
+      expansions.length ? expansionsCondition : [],
+      rarities.length ? raritiesCondition : [],
+      classes.length ? classesCondition : [],
+      after ? afterCondition : [],
+    ];
+
+    const cards = await this.cardModel.findAll({
+      where: Sequelize.and([...baseConditions, after ? afterCondition : []]),
+      limit: take,
+      attributes: attributes.fields,
+      include,
+    });
+
+    const totalCount = await this.cardModel.count({
+      where: Sequelize.and(baseConditions),
+      include,
+    });
 
     const edges: IEdgeType<Card>[] = cards.map((card) => {
       const cursor = cursorService.generateCursor({

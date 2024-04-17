@@ -1,20 +1,21 @@
 const CardModelFactory = {
-  findAndCountAll: jest.fn(),
-  findOne: jest.fn(),
+  findAll: jest.fn(),
+  count: jest.fn(),
 };
 
-CardModelFactory.findAndCountAll.mockImplementation(() => {
-  return {
-    count: 2,
-    rows: [
-      {
-        id: 1,
-      },
-      {
-        id: 2,
-      },
-    ],
-  };
+CardModelFactory.findAll.mockImplementation(() => {
+  return [
+    {
+      id: 1,
+    },
+    {
+      id: 2,
+    },
+  ];
+});
+
+CardModelFactory.count.mockImplementation(() => {
+  return 2;
 });
 
 export default CardModelFactory;
