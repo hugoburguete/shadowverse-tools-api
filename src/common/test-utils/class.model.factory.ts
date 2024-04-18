@@ -1,19 +1,21 @@
 const ClassModelFactory = {
   findOne: jest.fn(),
-  findAndCountAll: jest.fn(),
+  findAll: jest.fn(),
+  count: jest.fn(),
 };
-ClassModelFactory.findAndCountAll.mockImplementation(() => {
-  return {
-    count: 2,
-    rows: [
-      {
-        id: 1,
-      },
-      {
-        id: 2,
-      },
-    ],
-  };
+ClassModelFactory.findAll.mockImplementation(() => {
+  return [
+    {
+      id: 1,
+    },
+    {
+      id: 2,
+    },
+  ];
+});
+
+ClassModelFactory.count.mockImplementation(() => {
+  return 2;
 });
 
 ClassModelFactory.findOne.mockImplementation((args) => {

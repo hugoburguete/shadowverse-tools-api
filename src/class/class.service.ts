@@ -41,11 +41,12 @@ export class ClassService {
       };
     }
 
-    const { rows: classes, count: totalCount } =
-      await this.classModel.findAndCountAll<Class>({
-        attributes: attrs.fields,
-        where: after ? afterCondition : null,
-      });
+    const classes = await this.classModel.findAll({
+      attributes: attrs.fields,
+      where: after ? afterCondition : null,
+    });
+
+    const totalCount = await this.classModel.count();
 
     const edges: IEdgeType<Class>[] = classes.map((clax) => {
       const cursor = cursorService.generateCursor({
@@ -59,8 +60,6 @@ export class ClassService {
 
     const startCursor = edges.length > 0 ? edges[0].cursor : null;
     const endCursor = edges.length > 0 ? edges[edges.length - 1].cursor : null;
-
-    // TODO: This needs changing.
     const hasNextPage = false;
 
     return {

@@ -34,7 +34,7 @@ describe('ExpansionService', () => {
         relations: {},
       };
       const result = await service.findAll(args);
-      expect(result.length).toBe(2);
+      expect(result.edges.length).toBe(2);
     });
 
     it('should return a result with filtered expansions', async () => {
@@ -45,7 +45,7 @@ describe('ExpansionService', () => {
       };
       args.ids = [1];
       const result = await service.findAll(args);
-      expect(result.length).toBe(1);
+      expect(result.edges.length).toBe(1);
     });
   });
 

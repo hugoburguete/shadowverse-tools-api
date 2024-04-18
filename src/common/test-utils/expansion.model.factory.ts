@@ -4,6 +4,7 @@ import { Expansion } from 'src/expansion/entities/expansion.entity';
 const expansionModelFactory = {
   findAll: jest.fn(),
   findOne: jest.fn(),
+  count: jest.fn(),
 };
 
 expansionModelFactory.findAll.mockImplementation(
@@ -27,6 +28,10 @@ expansionModelFactory.findAll.mockImplementation(
     ];
   },
 );
+
+expansionModelFactory.count.mockImplementation(() => {
+  return 2;
+});
 
 expansionModelFactory.findOne.mockImplementation((args) => {
   if ([1, 2].includes(args.where.id)) {
