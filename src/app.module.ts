@@ -14,6 +14,7 @@ import { Expansion } from './expansion/entities/expansion.entity';
 import { ExpansionModule } from './expansion/expansion.module';
 import { Rarity } from './rarity/entities/rarity.entity';
 import { RarityModule } from './rarity/rarity.module';
+import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -35,7 +36,7 @@ import { UserModule } from './user/user.module';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_DB,
-      models: [Card, Expansion, Rarity, Class],
+      models: [Card, Expansion, Rarity, Class, User],
     } as SequelizeModuleOptions),
     CardsModule,
     ExpansionModule,
