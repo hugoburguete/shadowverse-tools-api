@@ -22,7 +22,7 @@ export class UserService {
   }
 
   async create(args: CreateUserArgs): Promise<User> {
-    const newUser = this.userModel.create(args);
+    const newUser = await this.userModel.create(args);
     return newUser;
   }
 }

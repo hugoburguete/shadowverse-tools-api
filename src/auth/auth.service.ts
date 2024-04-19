@@ -6,6 +6,8 @@ import { UserService } from 'src/user/user.service';
 import { LoginResponse } from './dto/login.response';
 import { RegisterArgs } from './dto/register.args';
 
+type UserAuthParams = Pick<User, 'id' | 'email'>;
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -43,10 +45,30 @@ export class AuthService {
     return this.login(newUser);
   }
 
-  async login(user: User): Promise<LoginResponse> {
+  async login(user: UserAuthParams): Promise<LoginResponse> {
+    // TODO: Log user access
+
+    // TODO: store refresh token
+
+    return this.generateTokens(user);
+  }
+
+  async refreshToken(user: UserAuthParams) {
+    return this.generateTokens(user);
+  }
+
+  private generateTokens(user: UserAuthParams) {
     const payload = { email: user.email, sub: user.id };
+
     return {
-      accessToken: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign(payload, {
+        expiresIn: process.env.ACCESS_EXPIRY,
+        secret: process.env.ACCESS_JWT_SECRET,
+      }),
+      refreshToken: this.jwtService.sign(payload, {
+        expiresIn: process.env.REFRESH_EXPIRY,
+        secret: process.env.REFRESH_JWT_SECRET,
+      }),
     };
   }
 }

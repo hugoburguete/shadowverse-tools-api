@@ -1,12 +1,13 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { User } from 'src/user/entities/user.entity';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/currentuser.decorator';
 import { LoginResponse } from './dto/login.response';
+import { RefreshTokenArgs } from './dto/refresh-token.args';
 import { RegisterArgs } from './dto/register.args';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { RefreshJwtGuard } from './guards/refresh-jwt.guard';
 
 @Resolver()
 export class AuthResolver {
@@ -27,9 +28,13 @@ export class AuthResolver {
     return await this.authService.register(args);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Query(() => User, { name: 'user' })
-  async getProfile(@CurrentUser() user: User): Promise<User> {
-    return user;
+  @UseGuards(RefreshJwtGuard)
+  @Mutation(() => LoginResponse)
+  async refreshToken(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Args() args: RefreshTokenArgs,
+    @CurrentUser() user: User,
+  ) {
+    return this.authService.refreshToken(user);
   }
 }
