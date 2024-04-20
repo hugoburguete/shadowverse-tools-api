@@ -9,7 +9,7 @@ import { CreateDeckInput } from './dto/create-deck.input';
 import { FindAllDecksArgs } from './dto/find-all-decks.args';
 import { FindOneDeckArgs } from './dto/find-one-deck.args';
 import { RemoveDeckArgs } from './dto/remove-deck.args';
-import { UpdateDeckInput } from './dto/update-deck.input';
+import { UpdateDeckArgs } from './dto/update-deck.args';
 import { DeckCard } from './entities/deck-card.entity';
 import { Deck } from './entities/deck.entity';
 import { PaginatedDecks } from './entities/paginated-deck.entity';
@@ -117,9 +117,38 @@ export class DeckService {
   /**
    * Updates a user deck.
    */
-  update(id: number, updateDeckInput: UpdateDeckInput) {
-    console.log(updateDeckInput);
-    return `This action updates a #${id} deck`;
+  async update({ id, userId, input }: UpdateDeckArgs): Promise<boolean> {
+    const deck = await this.findOne({
+      id,
+      userId,
+      attributes: {
+        fields: ['id'],
+        relations: {},
+      },
+    });
+
+    if (deck) {
+      const { deckCards, ...deckParams } = input;
+
+      if (deckCards) {
+        await this.deckCardModel.destroy({
+          where: { deckId: id },
+        });
+        const bulkDeckCardInfo = deckCards.map((deckCard) => {
+          deckCard.deckId = deck.id;
+          return { ...deckCard };
+        });
+        await this.deckCardModel.bulkCreate(bulkDeckCardInfo);
+      }
+
+      const updateResult = await this.deckModel.update(deckParams, {
+        where: { id, userId },
+      });
+
+      return updateResult.length > 0 && updateResult[0] > 0;
+    }
+
+    return false;
   }
 
   /**

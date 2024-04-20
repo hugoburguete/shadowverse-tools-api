@@ -9,6 +9,11 @@ import {
   REMOVE_STATUS_SUCCESS,
   RemoveOutput,
 } from 'src/user/dto/remove.output';
+import {
+  UPDATE_STATUS_ERROR,
+  UPDATE_STATUS_SUCCESS,
+  UpdateOutput,
+} from 'src/user/dto/update.output';
 import { User } from 'src/user/entities/user.entity';
 import { DeckService } from './deck.service';
 import { CreateDeckInput } from './dto/create-deck.input';
@@ -56,9 +61,20 @@ export class DeckResolver {
     return await this.deckService.findOne({ id, attributes, userId: user.id });
   }
 
-  @Mutation(() => Deck)
-  updateDeck(@Args('updateDeckInput') updateDeckInput: UpdateDeckInput) {
-    return this.deckService.update(updateDeckInput.id, updateDeckInput);
+  @UseGuards(JwtAuthGuard)
+  @Mutation(() => UpdateOutput)
+  async updateDeck(
+    @Args() updateDeckInput: UpdateDeckInput,
+    @CurrentUser() user: User,
+  ): Promise<UpdateOutput> {
+    const updated = await this.deckService.update({
+      ...updateDeckInput,
+      userId: user.id,
+    });
+
+    return {
+      status: updated ? UPDATE_STATUS_SUCCESS : UPDATE_STATUS_ERROR,
+    };
   }
 
   @UseGuards(JwtAuthGuard)

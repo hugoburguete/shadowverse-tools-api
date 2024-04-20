@@ -1,8 +1,11 @@
+import { ArgsType, Field, Int } from '@nestjs/graphql';
 import { CreateDeckInput } from './create-deck.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
 
-@InputType()
-export class UpdateDeckInput extends PartialType(CreateDeckInput) {
+@ArgsType()
+export class UpdateDeckInput {
   @Field(() => Int)
   id: number;
+
+  @Field(() => CreateDeckInput)
+  input: Partial<CreateDeckInput>;
 }
