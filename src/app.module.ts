@@ -27,10 +27,15 @@ import { UserModule } from './user/user.module';
       driver: ApolloDriver,
       autoSchemaFile: true,
       sortSchema: true,
-      formatError: (error) => ({
-        code: error.extensions?.code,
-        message: error.message,
-      }),
+      formatError: (error) => {
+        let code = error.extensions?.code;
+        if (error.extensions?.status === 404) code = 'RESOURCE_NOT_FOUND';
+
+        return {
+          code,
+          message: error.message,
+        };
+      },
     }),
     SequelizeModule.forRoot({
       dialect: process.env.DATABASE_TYPE,

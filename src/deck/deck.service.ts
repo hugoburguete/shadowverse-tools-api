@@ -1,11 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Includeable, Op } from 'sequelize';
+import { Includeable, Op, Sequelize, WhereOptions } from 'sequelize';
 import { Card } from 'src/card/entities/card.entity';
 import { CursorService } from 'src/common/cursor.service';
 import { ParsedField } from 'src/common/decorators/fields.decorator';
 import { IEdgeType } from 'src/common/interfaces/paginated.interface';
 import { CreateDeckInput } from './dto/create-deck.input';
+import { FindAllDecksArgs } from './dto/find-all-decks.args';
+import { FindOneDeckArgs } from './dto/find-one-deck.args';
 import { UpdateDeckInput } from './dto/update-deck.input';
 import { DeckCard } from './entities/deck-card.entity';
 import { Deck } from './entities/deck.entity';
@@ -20,33 +22,47 @@ export class DeckService {
     private deckCardModel: typeof DeckCard,
   ) {}
 
-  async create(createDeckInput: CreateDeckInput): Promise<Deck> {
+  async create(
+    createDeckInput: CreateDeckInput,
+    attributes: ParsedField,
+  ): Promise<Deck> {
     const { deckCards, ...rest } = createDeckInput;
-    const newDeck = await this.deckModel.create(rest);
+    const { id } = await this.deckModel.create(rest);
     deckCards.forEach(async (deckCard) => {
-      deckCard.deckId = newDeck.id;
+      deckCard.deckId = id;
       await this.deckCardModel.create({ ...deckCard });
     });
 
-    return newDeck;
+    return this.findOne({ id, attributes, userId: createDeckInput.userId });
   }
 
-  async findAll(
-    userId: number,
-    attributes: ParsedField,
-  ): Promise<PaginatedDecks> {
+  async findAll({
+    userId,
+    attributes,
+    after,
+  }: FindAllDecksArgs): Promise<PaginatedDecks> {
     const cursorService = new CursorService();
 
     const include: Includeable[] = this.getAssociations(attributes);
-    const where = { userId };
+    let afterCondition: WhereOptions;
+    if (after) {
+      const { entityId } = cursorService.decodeCursor(after);
+      afterCondition = {
+        id: {
+          [Op.gt]: entityId,
+        },
+      };
+    }
+    const baseConditions = { userId };
 
     const decks = await this.deckModel.findAll({
-      where,
+      attributes: attributes.fields,
+      where: Sequelize.and([baseConditions, after ? afterCondition : []]),
       include,
     });
 
     const totalCount = await this.deckModel.count({
-      where,
+      where: baseConditions,
       include,
     });
 
@@ -72,10 +88,20 @@ export class DeckService {
     };
   }
 
-  async findOne(id: number): Promise<Deck> {
-    return await this.deckModel.findOne({
-      where: { id: { [Op.eq]: id } },
+  async findOne({ id, attributes, userId }: FindOneDeckArgs): Promise<Deck> {
+    const include: Includeable[] = this.getAssociations(attributes);
+
+    const deck = await this.deckModel.findOne({
+      where: { id: { [Op.eq]: id }, userId: { [Op.eq]: userId } },
+      attributes: attributes.fields,
+      include,
     });
+
+    if (!deck) {
+      throw new NotFoundException(`Could not find deck with id ${id}.`);
+    }
+
+    return deck;
   }
 
   update(id: number, updateDeckInput: UpdateDeckInput) {
