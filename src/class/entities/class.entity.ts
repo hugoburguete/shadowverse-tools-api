@@ -5,7 +5,7 @@ import { Column, Model, Table } from 'sequelize-typescript';
 @Table({ timestamps: false, tableName: 'classes' })
 export class Class extends Model {
   @Field(() => Int, { description: 'The class identifier.' })
-  @Column({ primaryKey: true })
+  @Column({ primaryKey: true, autoIncrement: true })
   id: number;
 
   @Field(() => String, { description: 'The class slug.' })
