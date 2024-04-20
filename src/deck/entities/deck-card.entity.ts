@@ -21,21 +21,17 @@ export class DeckCard extends Model {
 
   // Card association
   @ForeignKey(() => Card)
-  @Field(() => Int)
   @Column
   cardId: number;
 
   @BelongsTo(() => Card)
-  @Field(() => Card)
   card?: Card;
 
   // Deck association
   @ForeignKey(() => Deck)
-  @Field(() => Int)
   @Column
   deckId?: number;
 
   @BelongsTo(() => Deck)
-  @Field(() => Deck)
   deck?: Deck;
 }

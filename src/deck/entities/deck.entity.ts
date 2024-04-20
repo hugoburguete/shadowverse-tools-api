@@ -4,6 +4,7 @@ import {
   BelongsTo,
   BelongsToMany,
   Column,
+  HasMany,
   Model,
   Table,
 } from 'sequelize-typescript';
@@ -32,9 +33,13 @@ export class Deck extends Model {
   name: string;
 
   // Card Association
-  @BelongsToMany(() => Card, () => DeckCard, 'cardId')
-  @Field(() => [DeckCard], { description: 'The cards this deck contains.' })
-  deckCards: DeckCard[];
+  @BelongsToMany(() => Card, () => DeckCard, 'deckId')
+  @Field(() => [Card], { description: 'The cards this deck contains.' })
+  cards: Card[];
+
+  @HasMany(() => DeckCard)
+  @Field(() => [DeckCard], { description: 'The cards with quantity.' })
+  cardsInfo: DeckCard[];
 
   // User Association
   @Field(() => Int)
