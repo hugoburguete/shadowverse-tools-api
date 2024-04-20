@@ -16,6 +16,8 @@ import { PaginatedDecks } from './entities/paginated-deck.entity';
 
 @Injectable()
 export class DeckService {
+  private cursorService = new CursorService();
+
   constructor(
     @InjectModel(Deck)
     private deckModel: typeof Deck,
@@ -32,10 +34,12 @@ export class DeckService {
   ): Promise<Deck> {
     const { deckCards, ...rest } = createDeckInput;
     const { id } = await this.deckModel.create(rest);
-    deckCards.forEach(async (deckCard) => {
+
+    const bulkDeckCardInfo = deckCards.map((deckCard) => {
       deckCard.deckId = id;
-      await this.deckCardModel.create({ ...deckCard });
+      return { ...deckCard };
     });
+    await this.deckCardModel.bulkCreate(bulkDeckCardInfo);
 
     return this.findOne({ id, attributes, userId: createDeckInput.userId });
   }
@@ -48,12 +52,10 @@ export class DeckService {
     attributes,
     after,
   }: FindAllDecksArgs): Promise<PaginatedDecks> {
-    const cursorService = new CursorService();
-
     const include: Includeable[] = this.getAssociations(attributes);
     let afterCondition: WhereOptions;
     if (after) {
-      const { entityId } = cursorService.decodeCursor(after);
+      const { entityId } = this.cursorService.decodeCursor(after);
       afterCondition = {
         id: {
           [Op.gt]: entityId,
@@ -74,7 +76,7 @@ export class DeckService {
     });
 
     const edges: IEdgeType<Deck>[] = decks.map((deck) => {
-      const cursor = cursorService.generateCursor({
+      const cursor = this.cursorService.generateCursor({
         entityId: deck.id,
       });
       return {
