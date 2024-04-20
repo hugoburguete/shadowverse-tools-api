@@ -33,7 +33,7 @@ export class DeckResolver {
   async createDeck(
     @Args('createDeckInput') createDeckInput: CreateDeckInput,
     @Fields() attributes: ParsedField,
-    @CurrentUser() user: User,
+    @CurrentUser() user: Partial<User>,
   ): Promise<Deck> {
     createDeckInput.userId = user.id;
     return await this.deckService.create(createDeckInput, attributes);
@@ -46,8 +46,8 @@ export class DeckResolver {
   })
   async findAll(
     @Args() findAllDecksInput: FindAllDecksInput,
-    @CurrentUser() user: User,
     @EdgesFields() attributes: ParsedField,
+    @CurrentUser() user: Partial<User>,
   ): Promise<PaginatedDecks> {
     return await this.deckService.findAll({
       ...findAllDecksInput,
@@ -60,8 +60,8 @@ export class DeckResolver {
   @Query(() => Deck, { name: 'deck', description: 'Finds a user deck.' })
   async findOne(
     @Args('id', { type: () => Int }) id: number,
-    @CurrentUser() user: User,
     @Fields() attributes: ParsedField,
+    @CurrentUser() user: Partial<User>,
   ): Promise<Deck> {
     return await this.deckService.findOne({ id, attributes, userId: user.id });
   }
@@ -70,7 +70,7 @@ export class DeckResolver {
   @Mutation(() => UpdateOutput, { description: 'Updates a user deck.' })
   async updateDeck(
     @Args() updateDeckInput: UpdateDeckInput,
-    @CurrentUser() user: User,
+    @CurrentUser() user: Partial<User>,
   ): Promise<UpdateOutput> {
     const updated = await this.deckService.update({
       ...updateDeckInput,
@@ -86,7 +86,7 @@ export class DeckResolver {
   @Mutation(() => RemoveOutput, { description: 'Removes a user deck.' })
   async removeDeck(
     @Args('id', { type: () => Int }) id: number,
-    @CurrentUser() user: User,
+    @CurrentUser() user: Partial<User>,
   ): Promise<RemoveOutput> {
     const removed = await this.deckService.remove({ id, userId: user.id });
     return {
