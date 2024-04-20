@@ -10,6 +10,9 @@ import { CardsModule } from './card/card.module';
 import { Card } from './card/entities/card.entity';
 import { ClassModule } from './class/class.module';
 import { Class } from './class/entities/class.entity';
+import { DeckModule } from './deck/deck.module';
+import { DeckCard } from './deck/entities/deck-card.entity';
+import { Deck } from './deck/entities/deck.entity';
 import { Expansion } from './expansion/entities/expansion.entity';
 import { ExpansionModule } from './expansion/expansion.module';
 import { Rarity } from './rarity/entities/rarity.entity';
@@ -36,7 +39,7 @@ import { UserModule } from './user/user.module';
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_DB,
-      models: [Card, Expansion, Rarity, Class, User],
+      models: [Card, Expansion, Rarity, Class, User, Deck, DeckCard],
     } as SequelizeModuleOptions),
     CardsModule,
     ExpansionModule,
@@ -44,6 +47,7 @@ import { UserModule } from './user/user.module';
     ClassModule,
     AuthModule,
     UserModule,
+    DeckModule,
   ],
   controllers: [AppController],
   providers: [AppService],

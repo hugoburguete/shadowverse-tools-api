@@ -1,12 +1,15 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   BelongsTo,
+  BelongsToMany,
   Column,
   ForeignKey,
   Model,
   Table,
 } from 'sequelize-typescript';
 import { Class } from 'src/class/entities/class.entity';
+import { DeckCard } from 'src/deck/entities/deck-card.entity';
+import { Deck } from 'src/deck/entities/deck.entity';
 import { Expansion } from 'src/expansion/entities/expansion.entity';
 import { Rarity } from '../../rarity/entities/rarity.entity';
 
@@ -76,4 +79,7 @@ export class Card extends Model<Card, Partial<Card>> {
   @Field(() => Rarity)
   @BelongsTo(() => Rarity)
   rarity?: Rarity;
+
+  @BelongsToMany(() => Deck, () => DeckCard, 'cardId')
+  decks: Deck;
 }
