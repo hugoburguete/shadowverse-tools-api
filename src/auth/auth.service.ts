@@ -24,6 +24,7 @@ export class AuthService {
 
     if (user && compareSync(password, user.password)) {
       return {
+        id: user.id,
         name: user.name,
         email: user.email,
       };
