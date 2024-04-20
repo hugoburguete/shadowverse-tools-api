@@ -27,7 +27,9 @@ export class DeckResolver {
   constructor(private readonly deckService: DeckService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Mutation(() => Deck)
+  @Mutation(() => Deck, {
+    description: 'Creates a deck for the logged in user.',
+  })
   async createDeck(
     @Args('createDeckInput') createDeckInput: CreateDeckInput,
     @Fields() attributes: ParsedField,
@@ -38,7 +40,10 @@ export class DeckResolver {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Query(() => PaginatedDecks, { name: 'decks' })
+  @Query(() => PaginatedDecks, {
+    name: 'decks',
+    description: 'Finds all user decks.',
+  })
   async findAll(
     @Args() findAllDecksInput: FindAllDecksInput,
     @CurrentUser() user: User,
@@ -52,7 +57,7 @@ export class DeckResolver {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Query(() => Deck, { name: 'deck' })
+  @Query(() => Deck, { name: 'deck', description: 'Finds a user deck.' })
   async findOne(
     @Args('id', { type: () => Int }) id: number,
     @CurrentUser() user: User,
@@ -62,7 +67,7 @@ export class DeckResolver {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Mutation(() => UpdateOutput)
+  @Mutation(() => UpdateOutput, { description: 'Updates a user deck.' })
   async updateDeck(
     @Args() updateDeckInput: UpdateDeckInput,
     @CurrentUser() user: User,
@@ -78,7 +83,7 @@ export class DeckResolver {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Mutation(() => RemoveOutput)
+  @Mutation(() => RemoveOutput, { description: 'Removes a user deck.' })
   async removeDeck(
     @Args('id', { type: () => Int }) id: number,
     @CurrentUser() user: User,

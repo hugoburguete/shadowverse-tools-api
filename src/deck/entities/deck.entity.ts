@@ -14,15 +14,21 @@ import { DeckCard } from './deck-card.entity';
 
 export type DeckFormat = 'standard' | 'gloryfinder';
 
-@ObjectType()
+@ObjectType({
+  description:
+    'A Shadowverse evolve deck consisting of 1 leader, 40 to 50 main deck cards and up to 10 evolve cards',
+})
 @Table
 export class Deck extends Model {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
+  @Field(() => Int, { description: 'The deck identifier.' })
   @Column({ primaryKey: true, autoIncrement: true })
   id: number;
 
   @IsIn(['standard', 'gloryfinder'])
-  @Field(() => String, { description: 'The game format this deck belongs to.' })
+  @Field(() => String, {
+    description:
+      'The game format this deck belongs to. The current deck formats supported are: standard and gloryfinder.',
+  })
   @Column
   format: DeckFormat;
 
@@ -42,7 +48,6 @@ export class Deck extends Model {
   cardsInfo: DeckCard[];
 
   // User Association
-  @Field(() => Int)
   @Column
   userId: number;
 
