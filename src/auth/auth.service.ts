@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { compareSync, genSaltSync, hashSync } from 'bcrypt';
 import { User } from 'src/user/entities/user.entity';
@@ -13,23 +18,27 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<Partial<User>> {
     const user = await this.userService.findOne(email);
 
+    if (!user) {
+      throw new NotFoundException(
+        'Could not find an account with the email provided.',
+      );
+    }
+
     if (!compareSync(password, user.password)) {
       throw new UnauthorizedException('Incorrect password.');
     }
 
-    if (user && compareSync(password, user.password)) {
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-      };
-    }
-    return null;
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
   }
 
   async register(args: RegisterArgs): Promise<LoginResponse> {
@@ -43,10 +52,21 @@ export class AuthService {
 
     args.password = hash;
     const newUser = await this.userService.create(args);
-    return this.login(newUser);
+    return this.generateTokens(newUser);
   }
 
   async login(user: AuthUser): Promise<LoginResponse> {
+    if (!user?.email) {
+      throw new UnauthorizedException(
+        'Incorrect credentials. Please try again',
+      );
+    }
+
+    const existingUser = await this.userService.findOne(user.email);
+    if (!existingUser) {
+      throw new NotFoundException('Incorrect email. Please try again');
+    }
+
     // TODO: Log user access
 
     // TODO: store refresh token
@@ -63,12 +83,12 @@ export class AuthService {
 
     return {
       accessToken: this.jwtService.sign(payload, {
-        expiresIn: process.env.ACCESS_EXPIRY,
-        secret: process.env.ACCESS_JWT_SECRET,
+        expiresIn: this.configService.get<string>('auth.tokens.access.expiry'),
+        secret: this.configService.get<string>('auth.tokens.access.secret'),
       }),
       refreshToken: this.jwtService.sign(payload, {
-        expiresIn: process.env.REFRESH_EXPIRY,
-        secret: process.env.REFRESH_JWT_SECRET,
+        expiresIn: this.configService.get<string>('auth.tokens.refresh.expiry'),
+        secret: this.configService.get<string>('auth.tokens.refresh.secret'),
       }),
     };
   }

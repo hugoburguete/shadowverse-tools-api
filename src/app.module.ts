@@ -10,6 +10,7 @@ import { CardsModule } from './card/card.module';
 import { Card } from './card/entities/card.entity';
 import { ClassModule } from './class/class.module';
 import { Class } from './class/entities/class.entity';
+import configuration from './config/configuration';
 import { DeckModule } from './deck/deck.module';
 import { DeckCard } from './deck/entities/deck-card.entity';
 import { Deck } from './deck/entities/deck.entity';
@@ -22,7 +23,11 @@ import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: ['.env', 'env.example'],
+      isGlobal: true,
+      load: [configuration],
+    }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
