@@ -18,5 +18,9 @@ export class User extends Model {
 
   @Column
   @Field(() => String)
-  name: string;
+  firstname: string;
+
+  @Column
+  @Field(() => String)
+  lastname: string;
 }

@@ -21,7 +21,8 @@ describe('AuthService', () => {
 
       return {
         id: 1,
-        name: 'My user',
+        firstname: 'My',
+        lastname: 'user',
         password: hash,
         email: email,
       };
@@ -95,8 +96,8 @@ describe('AuthService', () => {
       const args: RegisterArgs = {
         email,
         password,
-        confirmPassword: password,
-        name: 'New user',
+        firstname: 'New',
+        lastname: 'user',
       };
 
       userServiceMock.create.mockImplementationOnce(() => {
@@ -117,8 +118,8 @@ describe('AuthService', () => {
       const args: RegisterArgs = {
         email,
         password,
-        confirmPassword: password,
-        name: 'New user',
+        firstname: 'New',
+        lastname: 'user',
       };
 
       await expect(service.register(args)).rejects.toThrow(

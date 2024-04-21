@@ -1,10 +1,17 @@
 import { ArgsType, Field } from '@nestjs/graphql';
-import { IsEmail, Min } from 'class-validator';
+import { IsEmail, Max, Min } from 'class-validator';
 
 @ArgsType()
 export abstract class CreateUserArgs {
+  @Min(3)
+  @Max(40)
   @Field(() => String)
-  name: string;
+  firstname: string;
+
+  @Min(3)
+  @Max(40)
+  @Field(() => String)
+  lastname: string;
 
   @Field(() => String)
   @IsEmail()

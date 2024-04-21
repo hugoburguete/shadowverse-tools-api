@@ -45,10 +45,10 @@ describe('AuthResolver', () => {
     it("should call authService's register function", () => {
       const password = 'secret';
       const args: RegisterArgs = {
-        name: 'New User',
+        firstname: 'New',
+        lastname: 'user',
         email: 'test@test.com',
         password,
-        confirmPassword: password,
       };
       resolver.register(args);
 
