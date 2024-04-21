@@ -6,7 +6,7 @@ import { UserService } from 'src/user/user.service';
 import { LoginResponse } from './dto/login.response';
 import { RegisterArgs } from './dto/register.args';
 
-type UserAuthParams = Pick<User, 'id' | 'email'>;
+export type AuthUser = Pick<User, 'id' | 'email'>;
 
 @Injectable()
 export class AuthService {
@@ -46,7 +46,7 @@ export class AuthService {
     return this.login(newUser);
   }
 
-  async login(user: UserAuthParams): Promise<LoginResponse> {
+  async login(user: AuthUser): Promise<LoginResponse> {
     // TODO: Log user access
 
     // TODO: store refresh token
@@ -54,11 +54,11 @@ export class AuthService {
     return this.generateTokens(user);
   }
 
-  async refreshToken(user: UserAuthParams) {
+  async refreshToken(user: AuthUser) {
     return this.generateTokens(user);
   }
 
-  private generateTokens(user: UserAuthParams) {
+  private generateTokens(user: AuthUser) {
     const payload = { email: user.email, sub: user.id };
 
     return {
