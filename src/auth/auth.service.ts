@@ -9,7 +9,7 @@ import { compareSync, genSaltSync, hashSync } from 'bcrypt';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { LoginResponse } from './dto/login.response';
-import { RegisterArgs } from './dto/register.args';
+import { RegisterInput } from './dto/register.input';
 
 export type AuthUser = Pick<User, 'id' | 'email'>;
 
@@ -42,7 +42,7 @@ export class AuthService {
     };
   }
 
-  async register(args: RegisterArgs): Promise<LoginResponse> {
+  async register(args: RegisterInput): Promise<LoginResponse> {
     const existingUser = await this.userService.findOne(args.email);
     if (existingUser) {
       throw new UnauthorizedException('User already registered.');

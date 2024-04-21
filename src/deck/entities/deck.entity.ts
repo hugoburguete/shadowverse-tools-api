@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { IsIn, Max, Min } from 'class-validator';
+import { IsIn, MaxLength, MinLength } from 'class-validator';
 import {
   BelongsTo,
   BelongsToMany,
@@ -32,8 +32,8 @@ export class Deck extends Model {
   @Column
   format: DeckFormat;
 
-  @Min(3)
-  @Max(30)
+  @MinLength(3)
+  @MaxLength(30)
   @Field(() => String, { description: 'The deck name.' })
   @Column
   name: string;

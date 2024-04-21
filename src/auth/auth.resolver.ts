@@ -1,10 +1,11 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
+import { validate } from 'class-validator';
 import { AuthService, AuthUser } from './auth.service';
 import { CurrentUser } from './decorators/currentuser.decorator';
 import { LoginResponse } from './dto/login.response';
 import { RefreshTokenArgs } from './dto/refresh-token.args';
-import { RegisterArgs } from './dto/register.args';
+import { RegisterInput } from './dto/register.input';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RefreshJwtGuard } from './guards/refresh-jwt.guard';
 
@@ -23,7 +24,11 @@ export class AuthResolver {
   }
 
   @Mutation(() => LoginResponse)
-  async register(@Args() args: RegisterArgs): Promise<LoginResponse> {
+  async register(
+    @Args('registerInput') args: RegisterInput,
+  ): Promise<LoginResponse> {
+    const result = await validate(args);
+    console.log(result);
     return await this.authService.register(args);
   }
 
