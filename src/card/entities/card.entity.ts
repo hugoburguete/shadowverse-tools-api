@@ -1,12 +1,15 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
   BelongsTo,
+  BelongsToMany,
   Column,
   ForeignKey,
   Model,
   Table,
 } from 'sequelize-typescript';
 import { Class } from 'src/class/entities/class.entity';
+import { DeckCard } from 'src/deck/entities/deck-card.entity';
+import { Deck } from 'src/deck/entities/deck.entity';
 import { Expansion } from 'src/expansion/entities/expansion.entity';
 import { Rarity } from '../../rarity/entities/rarity.entity';
 
@@ -15,7 +18,7 @@ export type CardType = 'Follower' | 'Follower / Evolve' | 'Spell' | 'Leader';
 @ObjectType()
 @Table({ timestamps: false })
 export class Card extends Model<Card, Partial<Card>> {
-  @Column({ primaryKey: true })
+  @Column({ primaryKey: true, autoIncrement: true })
   id: number;
 
   @Field(() => String)
@@ -76,4 +79,7 @@ export class Card extends Model<Card, Partial<Card>> {
   @Field(() => Rarity)
   @BelongsTo(() => Rarity)
   rarity?: Rarity;
+
+  @BelongsToMany(() => Deck, () => DeckCard, 'cardId')
+  decks: Deck;
 }

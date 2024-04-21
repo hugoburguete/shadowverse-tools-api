@@ -6,7 +6,7 @@ import { Card } from '../../card/entities/card.entity';
 @Table({ timestamps: false })
 export class Rarity extends Model<Rarity> {
   @Field(() => Int, { description: 'The rarity identifier.' })
-  @Column({ primaryKey: true })
+  @Column({ primaryKey: true, autoIncrement: true })
   id: number;
 
   @Field(() => String, { description: 'The rarity name.' })

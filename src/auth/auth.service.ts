@@ -1,0 +1,95 @@
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import { compareSync, genSaltSync, hashSync } from 'bcrypt';
+import { User } from 'src/user/entities/user.entity';
+import { UserService } from 'src/user/user.service';
+import { LoginResponse } from './dto/login.response';
+import { RegisterArgs } from './dto/register.args';
+
+export type AuthUser = Pick<User, 'id' | 'email'>;
+
+@Injectable()
+export class AuthService {
+  constructor(
+    private userService: UserService,
+    private jwtService: JwtService,
+    private configService: ConfigService,
+  ) {}
+
+  async validateUser(email: string, password: string): Promise<Partial<User>> {
+    const user = await this.userService.findOne(email);
+
+    if (!user) {
+      throw new NotFoundException(
+        'Could not find an account with the email provided.',
+      );
+    }
+
+    if (!compareSync(password, user.password)) {
+      throw new UnauthorizedException('Incorrect password.');
+    }
+
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    };
+  }
+
+  async register(args: RegisterArgs): Promise<LoginResponse> {
+    const existingUser = await this.userService.findOne(args.email);
+    if (existingUser) {
+      throw new UnauthorizedException('User already registered.');
+    }
+
+    const salt = genSaltSync(10);
+    const hash = hashSync(args.password, salt);
+
+    args.password = hash;
+    const newUser = await this.userService.create(args);
+    return this.generateTokens(newUser);
+  }
+
+  async login(user: AuthUser): Promise<LoginResponse> {
+    if (!user?.email) {
+      throw new UnauthorizedException(
+        'Incorrect credentials. Please try again',
+      );
+    }
+
+    const existingUser = await this.userService.findOne(user.email);
+    if (!existingUser) {
+      throw new NotFoundException('Incorrect email. Please try again');
+    }
+
+    // TODO: Log user access
+
+    // TODO: store refresh token
+
+    return this.generateTokens(user);
+  }
+
+  async refreshToken(user: AuthUser) {
+    return this.generateTokens(user);
+  }
+
+  private generateTokens(user: AuthUser) {
+    const payload = { email: user.email, sub: user.id };
+
+    return {
+      accessToken: this.jwtService.sign(payload, {
+        expiresIn: this.configService.get<string>('auth.tokens.access.expiry'),
+        secret: this.configService.get<string>('auth.tokens.access.secret'),
+      }),
+      refreshToken: this.jwtService.sign(payload, {
+        expiresIn: this.configService.get<string>('auth.tokens.refresh.expiry'),
+        secret: this.configService.get<string>('auth.tokens.refresh.secret'),
+      }),
+    };
+  }
+}
