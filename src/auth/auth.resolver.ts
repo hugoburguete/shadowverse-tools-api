@@ -3,6 +3,7 @@ import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { validate } from 'class-validator';
 import { AuthService, AuthUser } from './auth.service';
 import { CurrentUser } from './decorators/currentuser.decorator';
+import { LoginInput } from './dto/login.input';
 import { LoginResponse } from './dto/login.response';
 import { RefreshTokenArgs } from './dto/refresh-token.args';
 import { RegisterInput } from './dto/register.input';
@@ -16,8 +17,7 @@ export class AuthResolver {
   @UseGuards(LocalAuthGuard)
   @Mutation(() => LoginResponse)
   async login(
-    @Args({ name: 'email', type: () => String }) email: string,
-    @Args({ name: 'password', type: () => String }) password: string,
+    @Args('loginInput') args: LoginInput,
     @CurrentUser() user: AuthUser,
   ): Promise<LoginResponse> {
     return await this.authService.login(user);

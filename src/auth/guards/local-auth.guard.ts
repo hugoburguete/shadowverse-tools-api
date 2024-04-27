@@ -9,8 +9,8 @@ export class LocalAuthGuard extends AuthGuard('local') {
     const request = ctx.getContext().req;
     const args = ctx.getArgs();
     request.body = {
-      username: args.email,
-      password: args.password,
+      username: args.loginInput.email,
+      password: args.loginInput.password,
     };
     return request;
   }
