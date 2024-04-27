@@ -1,6 +1,5 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Mutation, Resolver } from '@nestjs/graphql';
-import { validate } from 'class-validator';
 import { AuthService, AuthUser } from './auth.service';
 import { CurrentUser } from './decorators/currentuser.decorator';
 import { LoginInput } from './dto/login.input';
@@ -27,8 +26,6 @@ export class AuthResolver {
   async register(
     @Args('registerInput') args: RegisterInput,
   ): Promise<LoginResponse> {
-    const result = await validate(args);
-    console.log(result);
     return await this.authService.register(args);
   }
 

@@ -49,7 +49,8 @@ describe('UserService', () => {
       const email = 'test@test.com';
       const args: CreateUserArgs = {
         email,
-        name: 'Test',
+        firstname: 'My',
+        lastname: 'Test',
         password: '123',
       };
 
