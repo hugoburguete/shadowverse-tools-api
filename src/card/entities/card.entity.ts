@@ -18,6 +18,7 @@ export type CardType = 'Follower' | 'Follower / Evolve' | 'Spell' | 'Leader';
 @ObjectType()
 @Table({ timestamps: false })
 export class Card extends Model<Card, Partial<Card>> {
+  @Field(() => Int)
   @Column({ primaryKey: true, autoIncrement: true })
   id: number;
 
