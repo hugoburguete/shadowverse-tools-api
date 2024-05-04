@@ -15,7 +15,7 @@ export class CreateDeckInput {
 
   @IsIn(['standard', 'gloryfinder'])
   @Field(() => String, { description: 'The game format this deck belongs to.' })
-  format: DeckFormat;
+  format: `${DeckFormat}`;
 
   @Field(() => [DeckCardInput], {
     description: 'The cards this deck contains.',

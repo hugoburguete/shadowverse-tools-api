@@ -12,7 +12,10 @@ import { Card } from 'src/card/entities/card.entity';
 import { User } from 'src/user/entities/user.entity';
 import { DeckCard } from './deck-card.entity';
 
-export type DeckFormat = 'standard' | 'gloryfinder';
+export enum DeckFormat {
+  STANDARD = 'standard',
+  GLORYFINDER = 'gloryfinder',
+}
 
 @ObjectType({
   description:
@@ -30,7 +33,7 @@ export class Deck extends Model {
       'The game format this deck belongs to. The current deck formats supported are: standard and gloryfinder.',
   })
   @Column
-  format: DeckFormat;
+  format: `${DeckFormat}`;
 
   @MinLength(3)
   @MaxLength(30)

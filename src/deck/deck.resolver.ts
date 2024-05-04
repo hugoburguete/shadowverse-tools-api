@@ -21,6 +21,7 @@ import { FindAllDecksInput } from './dto/find-all-decks.input';
 import { UpdateDeckInput } from './dto/update-deck.input';
 import { Deck } from './entities/deck.entity';
 import { PaginatedDecks } from './entities/paginated-deck.entity';
+import { DeckValidationPipe } from './pipes/deck-validation.pipe';
 
 @Resolver(() => Deck)
 export class DeckResolver {
@@ -31,7 +32,8 @@ export class DeckResolver {
     description: 'Creates a deck for the logged in user.',
   })
   async createDeck(
-    @Args('createDeckInput') createDeckInput: CreateDeckInput,
+    @Args('createDeckInput', DeckValidationPipe)
+    createDeckInput: CreateDeckInput,
     @Fields() attributes: ParsedField,
     @CurrentUser() user: Partial<User>,
   ): Promise<Deck> {

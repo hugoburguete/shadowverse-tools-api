@@ -13,7 +13,12 @@ import { Deck } from 'src/deck/entities/deck.entity';
 import { Expansion } from 'src/expansion/entities/expansion.entity';
 import { Rarity } from '../../rarity/entities/rarity.entity';
 
-export type CardType = 'Follower' | 'Follower / Evolve' | 'Spell' | 'Leader';
+export enum CardType {
+  FOLLOWER = 'Follower',
+  FOLLOWER_EVOLVE = 'Follower / Evolve',
+  SPELL = 'Spell',
+  LEADER = 'Leader',
+}
 
 @ObjectType()
 @Table({ timestamps: false })
@@ -41,7 +46,7 @@ export class Card extends Model<Card, Partial<Card>> {
 
   @Field(() => String)
   @Column
-  type: CardType;
+  type: `${CardType}`;
 
   @Field(() => Int)
   @ForeignKey(() => Class)
