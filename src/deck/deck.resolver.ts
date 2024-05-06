@@ -58,14 +58,12 @@ export class DeckResolver {
     });
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Query(() => Deck, { name: 'deck', description: 'Finds a user deck.' })
+  @Query(() => Deck, { name: 'deck', description: 'Finds a deck.' })
   async findOne(
     @Args('id', { type: () => Int }) id: number,
     @Fields() attributes: ParsedField,
-    @CurrentUser() user: Partial<User>,
   ): Promise<Deck> {
-    return await this.deckService.findOne({ id, attributes, userId: user.id });
+    return await this.deckService.findOne({ id, attributes });
   }
 
   @UseGuards(JwtAuthGuard)
