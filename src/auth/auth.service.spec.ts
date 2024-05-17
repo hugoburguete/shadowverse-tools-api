@@ -1,4 +1,4 @@
-import { NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { AuthenticationError, ForbiddenError } from '@nestjs/apollo';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -75,7 +75,7 @@ describe('AuthService', () => {
       const email = 'test@test.com';
 
       await expect(service.validateUser(email, password)).rejects.toThrow(
-        UnauthorizedException,
+        AuthenticationError,
       );
     });
 
@@ -84,7 +84,7 @@ describe('AuthService', () => {
       const email = 'hackerman@test.com';
 
       await expect(service.validateUser(email, password)).rejects.toThrow(
-        NotFoundException,
+        AuthenticationError,
       );
     });
   });
@@ -122,9 +122,7 @@ describe('AuthService', () => {
         lastname: 'user',
       };
 
-      await expect(service.register(args)).rejects.toThrow(
-        UnauthorizedException,
-      );
+      await expect(service.register(args)).rejects.toThrow(ForbiddenError);
     });
   });
 
@@ -149,7 +147,7 @@ describe('AuthService', () => {
         email,
       };
 
-      await expect(service.login(user)).rejects.toThrow(NotFoundException);
+      await expect(service.login(user)).rejects.toThrow(AuthenticationError);
     });
   });
 
@@ -174,18 +172,18 @@ describe('AuthService', () => {
         email,
       };
 
-      await expect(service.login(user)).rejects.toThrow(NotFoundException);
+      await expect(service.login(user)).rejects.toThrow(AuthenticationError);
     });
 
     it('should throw an error if the user is invalid.', async () => {
       let user: AuthUser = {} as AuthUser;
 
-      await expect(service.login(user)).rejects.toThrow(UnauthorizedException);
+      await expect(service.login(user)).rejects.toThrow(AuthenticationError);
 
       user = {
         email: null,
       } as AuthUser;
-      await expect(service.login(user)).rejects.toThrow(UnauthorizedException);
+      await expect(service.login(user)).rejects.toThrow(AuthenticationError);
     });
   });
 

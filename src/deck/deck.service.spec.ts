@@ -1,6 +1,6 @@
-import { NotFoundException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
+import { ResourceNotFoundError } from 'src/common/errors/resource-not-found.error';
 import DeckCardModelFactory from 'src/common/test-utils/deck-card.model.factory';
 import DeckModelFactory from 'src/common/test-utils/deck.model.factory';
 import { DeckService } from './deck.service';
@@ -136,7 +136,7 @@ describe('DeckService', () => {
           attributes,
           id: 1,
         }),
-      ).rejects.toThrow(NotFoundException);
+      ).rejects.toThrow(ResourceNotFoundError);
     });
   });
 

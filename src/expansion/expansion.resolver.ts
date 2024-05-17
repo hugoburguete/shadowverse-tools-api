@@ -1,6 +1,6 @@
-import { NotFoundException } from '@nestjs/common';
 import { Args, Int, Query, Resolver } from '@nestjs/graphql';
 import { Fields, ParsedField } from 'src/common/decorators/fields.decorator';
+import { ResourceNotFoundError } from 'src/common/errors/resource-not-found.error';
 import { FindAllExpansionsArgs } from './dto/find-all-expansions.args';
 import { Expansion } from './entities/expansion.entity';
 import { PaginatedExpansions } from './entities/paginated-expansions.entity';
@@ -26,7 +26,9 @@ export class ExpansionResolver {
   async findOne(@Args('id', { type: () => Int }) id: number) {
     const expansion = await this.expansionService.findOne(id);
     if (!expansion) {
-      throw new NotFoundException(id);
+      throw new ResourceNotFoundError(
+        `Could not find expansion with id ${id}.`,
+      );
     }
     return expansion;
   }
