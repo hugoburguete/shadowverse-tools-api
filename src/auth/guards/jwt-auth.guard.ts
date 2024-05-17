@@ -1,8 +1,5 @@
-import {
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { AuthenticationError } from '@nestjs/apollo';
+import { ExecutionContext, Injectable } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { TokenExpiredError } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
@@ -21,11 +18,15 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     info: any,
   ): TUser {
     if (info instanceof TokenExpiredError) {
-      throw new UnauthorizedException('TOKEN_EXPIRED');
+      throw new AuthenticationError(info.message, {
+        extensions: {
+          code: 'TOKEN_EXPIRED',
+        },
+      });
     }
 
     if (err || !user) {
-      throw err || new UnauthorizedException();
+      throw err || new AuthenticationError('UNAUTHORIZED');
     }
     return user;
   }
