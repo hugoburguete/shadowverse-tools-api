@@ -43,7 +43,7 @@ export class DeckValidationPipe
 
     const cards: ValidatableCard[] = cardData.map((card) => {
       return {
-        ...card,
+        ...card.toJSON(),
         quantity: deckCards.find((deckCard) => card.id === deckCard.cardId)
           .quantity,
       };

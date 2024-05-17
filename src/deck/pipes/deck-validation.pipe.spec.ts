@@ -62,7 +62,10 @@ describe('DeckValidationPipe', () => {
             slug: 'forestcraft',
           },
         };
-        return [...mainDeck, ...evolveDeck, leaderCard];
+        return [...mainDeck, ...evolveDeck, leaderCard].map((card) => {
+          card.toJSON = () => card;
+          return card;
+        });
       });
       const format = DeckFormat.STANDARD;
       const name = 'My new deck';
@@ -106,7 +109,10 @@ describe('DeckValidationPipe', () => {
           });
         }
 
-        return [...mainDeck, ...evolveDeck];
+        return [...mainDeck, ...evolveDeck].map((card) => {
+          card.toJSON = () => card;
+          return card;
+        });
       });
       const format = 'standard';
       const name = 'My new deck';

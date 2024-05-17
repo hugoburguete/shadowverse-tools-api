@@ -108,16 +108,12 @@ describe('DeckResolver', () => {
         fields: ['id'],
         relations: {},
       };
-      const user = {
-        id: 1,
-      };
 
-      resolver.findOne(123, attributes, user);
+      resolver.findOne(123, attributes);
 
       expect(DeckServiceMock.findOne).toHaveBeenCalled();
       expect(DeckServiceMock.findOne).toHaveBeenCalledWith({
         id: 123,
-        userId: user.id,
         attributes,
       });
     });
