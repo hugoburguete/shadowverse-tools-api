@@ -48,7 +48,7 @@ jobs:
         run: pnpm install
 
       - name: Run Tests
-        run: npm test
+        run: pnpm test
 
       - name: Run e2e Tests
-        run: npm test:e2e
+        run: pnpm test:e2e
