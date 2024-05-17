@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Includeable, Op, Sequelize, WhereOptions } from 'sequelize';
-import { Class } from 'src/class/entities/class.entity';
-import { CursorService } from 'src/common/cursor.service';
-import { ParsedField } from 'src/common/decorators/fields.decorator';
-import { IEdgeType } from 'src/common/interfaces/paginated.interface';
-import { Expansion } from 'src/expansion/entities/expansion.entity';
+import { Class } from '../class/entities/class.entity';
+import { CursorService } from '../common/cursor.service';
+import { ParsedField } from '../common/decorators/fields.decorator';
+import { IEdgeType } from '../common/interfaces/paginated.interface';
+import { Expansion } from '../expansion/entities/expansion.entity';
 import { Rarity } from '../rarity/entities/rarity.entity';
 import { FindAllCardsArgs } from './dto/find-all-cards.args';
 import { Card } from './entities/card.entity';

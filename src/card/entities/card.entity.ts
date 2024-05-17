@@ -7,10 +7,10 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Class } from 'src/class/entities/class.entity';
-import { DeckCard } from 'src/deck/entities/deck-card.entity';
-import { Deck } from 'src/deck/entities/deck.entity';
-import { Expansion } from 'src/expansion/entities/expansion.entity';
+import { Class } from '../../class/entities/class.entity';
+import { DeckCard } from '../../deck/entities/deck-card.entity';
+import { Deck } from '../../deck/entities/deck.entity';
+import { Expansion } from '../../expansion/entities/expansion.entity';
 import { Rarity } from '../../rarity/entities/rarity.entity';
 
 export enum CardType {

@@ -1,5 +1,5 @@
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { Fields, ParsedField } from 'src/common/decorators/fields.decorator';
+import { Fields, ParsedField } from '../common/decorators/fields.decorator';
 import { CardService } from './card.service';
 import { FindAllCardsArgs } from './dto/find-all-cards.args';
 import { PaginatedCards } from './entities/paginated-card.entity';

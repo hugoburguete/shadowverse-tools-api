@@ -1,6 +1,6 @@
 import { Args, Int, Query, Resolver } from '@nestjs/graphql';
-import { Fields, ParsedField } from 'src/common/decorators/fields.decorator';
-import { ResourceNotFoundError } from 'src/common/errors/resource-not-found.error';
+import { Fields, ParsedField } from '../common/decorators/fields.decorator';
+import { ResourceNotFoundError } from '../common/errors/resource-not-found.error';
 import { FindAllExpansionsArgs } from './dto/find-all-expansions.args';
 import { Expansion } from './entities/expansion.entity';
 import { PaginatedExpansions } from './entities/paginated-expansions.entity';

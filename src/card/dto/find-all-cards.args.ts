@@ -1,5 +1,5 @@
 import { ArgsType, Field, Int } from '@nestjs/graphql';
-import { PaginatedRetrieveArgs } from 'src/common/dto/paginated-retrieve.args';
+import { PaginatedRetrieveArgs } from '../../common/dto/paginated-retrieve.args';
 import { CardType } from '../entities/card.entity';
 
 @ArgsType()

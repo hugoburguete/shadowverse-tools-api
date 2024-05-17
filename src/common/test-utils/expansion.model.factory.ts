@@ -1,5 +1,5 @@
 import { FindOptions } from 'sequelize';
-import { Expansion } from 'src/expansion/entities/expansion.entity';
+import { Expansion } from '../../expansion/entities/expansion.entity';
 
 const expansionModelFactory = {
   findAll: jest.fn(),

@@ -1,5 +1,5 @@
-import { CardType } from 'src/card/entities/card.entity';
-import { Class } from 'src/class/entities/class.entity';
+import { CardType } from '../../card/entities/card.entity';
+import { Class } from '../../class/entities/class.entity';
 
 export type ValidatableCard = {
   cardId: string;

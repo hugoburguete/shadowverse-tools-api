@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Card } from 'src/card/entities/card.entity';
-import { UserModule } from 'src/user/user.module';
+import { Card } from '../card/entities/card.entity';
+import { UserModule } from '../user/user.module';
 import { DeckResolver } from './deck.resolver';
 import { DeckService } from './deck.service';
 import { DeckCard } from './entities/deck-card.entity';

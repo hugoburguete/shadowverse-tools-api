@@ -1,4 +1,4 @@
-import { CardType } from 'src/card/entities/card.entity';
+import { CardType } from '../../card/entities/card.entity';
 import {
   DeckFormatValidator,
   IDeckFormatValidator,

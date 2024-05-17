@@ -6,7 +6,7 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Card } from 'src/card/entities/card.entity';
+import { Card } from '../../card/entities/card.entity';
 import { Deck } from './deck.entity';
 
 @ObjectType()

@@ -8,8 +8,8 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { Card } from 'src/card/entities/card.entity';
-import { User } from 'src/user/entities/user.entity';
+import { Card } from '../../card/entities/card.entity';
+import { User } from '../../user/entities/user.entity';
 import { DeckCard } from './deck-card.entity';
 
 export enum DeckFormat {
