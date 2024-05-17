@@ -1,5 +1,7 @@
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
+import { Card } from 'src/card/entities/card.entity';
+import CardModelFactory from 'src/common/test-utils/card.model.factory';
 import DeckCardModelFactory from 'src/common/test-utils/deck-card.model.factory';
 import DeckModelFactory from 'src/common/test-utils/deck.model.factory';
 import { DeckResolver } from './deck.resolver';
@@ -35,6 +37,10 @@ describe('DeckResolver', () => {
         {
           provide: getModelToken(DeckCard),
           useValue: DeckCardModelFactory,
+        },
+        {
+          provide: getModelToken(Card),
+          useValue: CardModelFactory,
         },
       ],
     }).compile();
@@ -102,16 +108,12 @@ describe('DeckResolver', () => {
         fields: ['id'],
         relations: {},
       };
-      const user = {
-        id: 1,
-      };
 
-      resolver.findOne(123, attributes, user);
+      resolver.findOne(123, attributes);
 
       expect(DeckServiceMock.findOne).toHaveBeenCalled();
       expect(DeckServiceMock.findOne).toHaveBeenCalledWith({
         id: 123,
-        userId: user.id,
         attributes,
       });
     });

@@ -20,6 +20,7 @@ export class DeckCard extends Model {
   quantity: number;
 
   // Card association
+  @Field(() => Int)
   @ForeignKey(() => Card)
   @Column
   cardId: number;

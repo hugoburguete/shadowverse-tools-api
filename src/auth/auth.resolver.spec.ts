@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 import { RefreshTokenArgs } from './dto/refresh-token.args';
-import { RegisterArgs } from './dto/register.args';
+import { RegisterInput } from './dto/register.input';
 
 describe('AuthResolver', () => {
   let resolver: AuthResolver;
@@ -34,7 +34,11 @@ describe('AuthResolver', () => {
     it("should call authService's login function", () => {
       const email = 'test@test.com';
       const user = { id: 1, email: email };
-      resolver.login(email, 'secret', user);
+      const args = {
+        email,
+        password: 'secret',
+      };
+      resolver.login(args, user);
 
       expect(authServiceMock.login).toHaveBeenCalled();
       expect(authServiceMock.login).toHaveBeenCalledWith(user);
@@ -44,11 +48,11 @@ describe('AuthResolver', () => {
   describe('register', () => {
     it("should call authService's register function", () => {
       const password = 'secret';
-      const args: RegisterArgs = {
-        name: 'New User',
+      const args: RegisterInput = {
+        firstname: 'New',
+        lastname: 'user',
         email: 'test@test.com',
         password,
-        confirmPassword: password,
       };
       resolver.register(args);
 

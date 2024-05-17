@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { IsIn, Max, Min } from 'class-validator';
+import { IsIn, MaxLength, MinLength } from 'class-validator';
 import {
   BelongsTo,
   BelongsToMany,
@@ -12,7 +12,10 @@ import { Card } from 'src/card/entities/card.entity';
 import { User } from 'src/user/entities/user.entity';
 import { DeckCard } from './deck-card.entity';
 
-export type DeckFormat = 'standard' | 'gloryfinder';
+export enum DeckFormat {
+  STANDARD = 'standard',
+  GLORYFINDER = 'gloryfinder',
+}
 
 @ObjectType({
   description:
@@ -30,10 +33,10 @@ export class Deck extends Model {
       'The game format this deck belongs to. The current deck formats supported are: standard and gloryfinder.',
   })
   @Column
-  format: DeckFormat;
+  format: `${DeckFormat}`;
 
-  @Min(3)
-  @Max(30)
+  @MinLength(3)
+  @MaxLength(30)
   @Field(() => String, { description: 'The deck name.' })
   @Column
   name: string;

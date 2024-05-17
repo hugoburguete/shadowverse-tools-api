@@ -33,8 +33,11 @@ import { UserModule } from './user/user.module';
       autoSchemaFile: true,
       sortSchema: true,
       formatError: (error) => {
+        const errorMessage = error.message;
         let code = error.extensions?.code;
         if (error.extensions?.status === 404) code = 'RESOURCE_NOT_FOUND';
+        if (errorMessage.includes('Invalid payload:'))
+          code = 'GRAPHQL_VALIDATION_FAILED';
 
         return {
           code,

@@ -20,7 +20,7 @@ export class FindAllCardsArgs extends PaginatedRetrieveArgs {
     description:
       'Provide an array of types to filter by the type of card required.',
   })
-  types: CardType[] = [];
+  types: `${CardType}`[] = [];
 
   @Field(() => [Int])
   expansions: number[] = [];

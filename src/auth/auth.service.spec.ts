@@ -5,7 +5,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { genSaltSync, hashSync } from 'bcrypt';
 import { UserService } from 'src/user/user.service';
 import { AuthService, AuthUser } from './auth.service';
-import { RegisterArgs } from './dto/register.args';
+import { RegisterInput } from './dto/register.input';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -21,7 +21,8 @@ describe('AuthService', () => {
 
       return {
         id: 1,
-        name: 'My user',
+        firstname: 'My',
+        lastname: 'user',
         password: hash,
         email: email,
       };
@@ -92,11 +93,11 @@ describe('AuthService', () => {
     it("should create a new user if it doesn't already exist", async () => {
       const password = 'secret';
       const email = 'newUser@test.com';
-      const args: RegisterArgs = {
+      const args: RegisterInput = {
         email,
         password,
-        confirmPassword: password,
-        name: 'New user',
+        firstname: 'New',
+        lastname: 'user',
       };
 
       userServiceMock.create.mockImplementationOnce(() => {
@@ -114,11 +115,11 @@ describe('AuthService', () => {
     it('should throw an error if the user already exist', async () => {
       const password = 'secret';
       const email = 'test@test.com';
-      const args: RegisterArgs = {
+      const args: RegisterInput = {
         email,
         password,
-        confirmPassword: password,
-        name: 'New user',
+        firstname: 'New',
+        lastname: 'user',
       };
 
       await expect(service.register(args)).rejects.toThrow(

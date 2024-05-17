@@ -2,9 +2,11 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Includeable, Op, Sequelize, WhereOptions } from 'sequelize';
 import { Card } from 'src/card/entities/card.entity';
+import { Class } from 'src/class/entities/class.entity';
 import { CursorService } from 'src/common/cursor.service';
 import { ParsedField } from 'src/common/decorators/fields.decorator';
 import { IEdgeType } from 'src/common/interfaces/paginated.interface';
+import { Rarity } from 'src/rarity/entities/rarity.entity';
 import { CreateDeckInput } from './dto/create-deck.input';
 import { FindAllDecksArgs } from './dto/find-all-decks.args';
 import { FindOneDeckArgs } from './dto/find-one-deck.args';
@@ -41,7 +43,7 @@ export class DeckService {
     });
     await this.deckCardModel.bulkCreate(bulkDeckCardInfo);
 
-    return this.findOne({ id, attributes, userId: createDeckInput.userId });
+    return this.findOne({ id, attributes });
   }
 
   /**
@@ -100,11 +102,11 @@ export class DeckService {
   /**
    * Retrieve a user deck.
    */
-  async findOne({ id, attributes, userId }: FindOneDeckArgs): Promise<Deck> {
+  async findOne({ id, attributes }: FindOneDeckArgs): Promise<Deck> {
     const include: Includeable[] = this.getAssociations(attributes);
 
     const deck = await this.deckModel.findOne({
-      where: { id: { [Op.eq]: id }, userId: { [Op.eq]: userId } },
+      where: { id: { [Op.eq]: id } },
       attributes: attributes.fields,
       include,
     });
@@ -122,7 +124,6 @@ export class DeckService {
   async update({ id, userId, input }: UpdateDeckArgs): Promise<boolean> {
     const deck = await this.findOne({
       id,
-      userId,
       attributes: {
         fields: ['id'],
         relations: {},
@@ -159,7 +160,6 @@ export class DeckService {
   async remove({ id, userId }: RemoveDeckArgs): Promise<boolean> {
     const deck = await this.findOne({
       id,
-      userId,
       attributes: {
         fields: ['id'],
         relations: {},
@@ -196,9 +196,21 @@ export class DeckService {
   };
 
   private getCardsAssociation(cardsAttr: ParsedField<string>): Includeable {
+    const include = [];
+    const classAttr = cardsAttr.relations.class;
+    if (classAttr) {
+      include.push(this.getClassAssociation(classAttr));
+    }
+
+    const rarityAttr = cardsAttr.relations.rarity;
+    if (rarityAttr) {
+      include.push(this.getRarityAssociation(rarityAttr));
+    }
+
     return {
       model: Card,
       attributes: cardsAttr.fields,
+      include,
     };
   }
 
@@ -208,6 +220,20 @@ export class DeckService {
     return {
       model: DeckCard,
       attributes: deckCardsAttr.fields,
+    };
+  }
+
+  private getClassAssociation(classAttr: ParsedField<string>): Includeable {
+    return {
+      model: Class,
+      attributes: classAttr.fields,
+    };
+  }
+
+  private getRarityAssociation(classAttr: ParsedField<string>): Includeable {
+    return {
+      model: Rarity,
+      attributes: classAttr.fields,
     };
   }
 }

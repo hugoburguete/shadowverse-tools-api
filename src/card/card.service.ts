@@ -19,27 +19,6 @@ export class CardService {
   ) {}
 
   /**
-   * Helper function that determines if a search is completely empty
-   */
-  private isEmptySearch({
-    searchTerm,
-    cost,
-    types,
-    expansions,
-    rarities,
-    classes,
-  }: FindAllCardsArgs): boolean {
-    return (
-      !searchTerm &&
-      !cost.length &&
-      !types.length &&
-      !expansions.length &&
-      !rarities.length &&
-      !classes.length
-    );
-  }
-
-  /**
    * Searches for cards.
    *
    * @param searchCriteria Search options
@@ -148,6 +127,12 @@ export class CardService {
     };
   };
 
+  /**
+   * Retrieves an array of model inclusions.
+   *
+   * @param attributes The attributes to add to the query.
+   * @returns
+   */
   private getAssociations = (attributes: ParsedField): Includeable[] => {
     const include = [];
     const expansionAttr = attributes.relations.expansion;
