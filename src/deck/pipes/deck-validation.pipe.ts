@@ -1,8 +1,5 @@
-import {
-  Injectable,
-  PipeTransform,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { UserInputError } from '@nestjs/apollo';
+import { Injectable, PipeTransform } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Card } from 'src/card/entities/card.entity';
 import { Class } from 'src/class/entities/class.entity';
@@ -71,6 +68,6 @@ export class DeckValidationPipe
   }
 
   private sendValidationError(err: string) {
-    throw new UnprocessableEntityException(`Invalid payload: ${err}`);
+    throw new UserInputError(err);
   }
 }
