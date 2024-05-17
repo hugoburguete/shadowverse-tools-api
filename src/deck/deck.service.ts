@@ -1,10 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Includeable, Op, Sequelize, WhereOptions } from 'sequelize';
 import { Card } from 'src/card/entities/card.entity';
 import { Class } from 'src/class/entities/class.entity';
 import { CursorService } from 'src/common/cursor.service';
 import { ParsedField } from 'src/common/decorators/fields.decorator';
+import { ResourceNotFoundError } from 'src/common/errors/resource-not-found.error';
 import { IEdgeType } from 'src/common/interfaces/paginated.interface';
 import { Rarity } from 'src/rarity/entities/rarity.entity';
 import { CreateDeckInput } from './dto/create-deck.input';
@@ -112,7 +113,7 @@ export class DeckService {
     });
 
     if (!deck) {
-      throw new NotFoundException(`Could not find deck with id ${id}.`);
+      throw new ResourceNotFoundError(`Could not find deck with id ${id}.`);
     }
 
     return deck;

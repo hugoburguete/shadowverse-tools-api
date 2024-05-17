@@ -1,6 +1,6 @@
-import { NotFoundException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
+import { ResourceNotFoundError } from 'src/common/errors/resource-not-found.error';
 import expansionModelFactory from 'src/common/test-utils/expansion.model.factory';
 import { FindAllExpansionsArgs } from './dto/find-all-expansions.args';
 import { Expansion } from './entities/expansion.entity';
@@ -63,7 +63,7 @@ describe('ExpansionResolver', () => {
       const t = async () => {
         await resolver.findOne(expansionId);
       };
-      expect(t).rejects.toThrow(NotFoundException);
+      expect(t).rejects.toThrow(ResourceNotFoundError);
     });
   });
 });

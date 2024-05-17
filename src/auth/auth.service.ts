@@ -1,8 +1,5 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { AuthenticationError, ForbiddenError } from '@nestjs/apollo';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { compareSync, genSaltSync, hashSync } from 'bcrypt';
@@ -25,13 +22,13 @@ export class AuthService {
     const user = await this.userService.findOne(email);
 
     if (!user) {
-      throw new NotFoundException(
+      throw new AuthenticationError(
         'Could not find an account with the email provided.',
       );
     }
 
     if (!compareSync(password, user.password)) {
-      throw new UnauthorizedException('Incorrect password.');
+      throw new AuthenticationError('Incorrect password.');
     }
 
     return {
@@ -45,7 +42,7 @@ export class AuthService {
   async register(args: RegisterInput): Promise<LoginResponse> {
     const existingUser = await this.userService.findOne(args.email);
     if (existingUser) {
-      throw new UnauthorizedException('User already registered.');
+      throw new ForbiddenError('User already registered.');
     }
 
     const salt = genSaltSync(10);
@@ -58,14 +55,12 @@ export class AuthService {
 
   async login(user: AuthUser): Promise<LoginResponse> {
     if (!user?.email) {
-      throw new UnauthorizedException(
-        'Incorrect credentials. Please try again',
-      );
+      throw new AuthenticationError('Incorrect credentials. Please try again');
     }
 
     const existingUser = await this.userService.findOne(user.email);
     if (!existingUser) {
-      throw new NotFoundException('Incorrect email. Please try again');
+      throw new AuthenticationError('Incorrect email. Please try again');
     }
 
     // TODO: Log user access

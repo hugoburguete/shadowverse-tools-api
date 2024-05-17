@@ -1,4 +1,4 @@
-import { UnprocessableEntityException } from '@nestjs/common';
+import { UserInputError } from '@nestjs/apollo';
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Card, CardType } from 'src/card/entities/card.entity';
@@ -124,7 +124,7 @@ describe('DeckValidationPipe', () => {
 
       await expect(
         pipe.transform({ format, name, deckCards, userId }),
-      ).rejects.toThrow(UnprocessableEntityException);
+      ).rejects.toThrow(UserInputError);
     });
   });
 });

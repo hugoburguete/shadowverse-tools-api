@@ -1,8 +1,8 @@
-import { NotFoundException } from '@nestjs/common';
 import { getModelToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CardService } from 'src/card/card.service';
 import { Card } from 'src/card/entities/card.entity';
+import { ResourceNotFoundError } from 'src/common/errors/resource-not-found.error';
 import CardModelFactory from 'src/common/test-utils/card.model.factory';
 import ClassModelFactory from 'src/common/test-utils/class.model.factory';
 import { ClassResolver } from './class.resolver';
@@ -51,7 +51,7 @@ describe('ClassResolver', () => {
       const t = async () => {
         await resolver.findOne(classId, { fields: ['id'], relations: {} });
       };
-      expect(t).rejects.toThrow(NotFoundException);
+      expect(t).rejects.toThrow(ResourceNotFoundError);
     });
   });
 
