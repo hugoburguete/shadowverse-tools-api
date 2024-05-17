@@ -117,7 +117,6 @@ describe('DeckService', () => {
       const result = await service.findOne({
         attributes,
         id: 1,
-        userId: 1,
       });
       expect(DeckModelFactory.findOne).toHaveBeenCalled();
       expect(result.id).toBe(1);
@@ -136,7 +135,6 @@ describe('DeckService', () => {
         service.findOne({
           attributes,
           id: 1,
-          userId: 1,
         }),
       ).rejects.toThrow(NotFoundException);
     });
