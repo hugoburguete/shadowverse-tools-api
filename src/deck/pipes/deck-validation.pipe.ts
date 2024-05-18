@@ -1,8 +1,8 @@
 import { UserInputError } from '@nestjs/apollo';
 import { Injectable, PipeTransform } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Card } from 'src/card/entities/card.entity';
-import { Class } from 'src/class/entities/class.entity';
+import { Card } from '../../card/entities/card.entity';
+import { Class } from '../../class/entities/class.entity';
 import { CreateDeckInput } from '../dto/create-deck.input';
 import { DeckFormat } from '../entities/deck.entity';
 import { GloryfinderValidator } from '../validators/gloryfinder.validator';

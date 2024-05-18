@@ -1,5 +1,5 @@
 import { ArgsType } from '@nestjs/graphql';
-import { ParsedField } from 'src/common/decorators/fields.decorator';
+import { ParsedField } from '../../common/decorators/fields.decorator';
 
 @ArgsType()
 export abstract class RetrieveArgs {

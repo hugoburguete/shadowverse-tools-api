@@ -1,20 +1,20 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CurrentUser } from 'src/auth/decorators/currentuser.decorator';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { EdgesFields } from 'src/common/decorators/edges-fields.decorator';
-import { Fields, ParsedField } from 'src/common/decorators/fields.decorator';
+import { CurrentUser } from '../auth/decorators/currentuser.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { EdgesFields } from '../common/decorators/edges-fields.decorator';
+import { Fields, ParsedField } from '../common/decorators/fields.decorator';
 import {
   REMOVE_STATUS_ERROR,
   REMOVE_STATUS_SUCCESS,
   RemoveOutput,
-} from 'src/user/dto/remove.output';
+} from '../user/dto/remove.output';
 import {
   UPDATE_STATUS_ERROR,
   UPDATE_STATUS_SUCCESS,
   UpdateOutput,
-} from 'src/user/dto/update.output';
-import { User } from 'src/user/entities/user.entity';
+} from '../user/dto/update.output';
+import { User } from '../user/entities/user.entity';
 import { DeckService } from './deck.service';
 import { CreateDeckInput } from './dto/create-deck.input';
 import { FindAllDecksInput } from './dto/find-all-decks.input';

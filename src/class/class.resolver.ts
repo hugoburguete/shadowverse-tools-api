@@ -1,8 +1,8 @@
 import { Args, Int, Query, Resolver } from '@nestjs/graphql';
-import { CardService } from 'src/card/card.service';
-import { Card } from 'src/card/entities/card.entity';
-import { Fields, ParsedField } from 'src/common/decorators/fields.decorator';
-import { ResourceNotFoundError } from 'src/common/errors/resource-not-found.error';
+import { CardService } from '../card/card.service';
+import { Card } from '../card/entities/card.entity';
+import { Fields, ParsedField } from '../common/decorators/fields.decorator';
+import { ResourceNotFoundError } from '../common/errors/resource-not-found.error';
 import { ClassService } from './class.service';
 import { FindAllClassesArgs } from './dto/find-all-classes.args';
 import { FindOneClassArgs } from './dto/find-one-class.args';

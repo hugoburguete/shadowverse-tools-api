@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Op, WhereOptions } from 'sequelize';
-import { CursorService } from 'src/common/cursor.service';
-import { IEdgeType } from 'src/common/interfaces/paginated.interface';
+import { CursorService } from '../common/cursor.service';
+import { IEdgeType } from '../common/interfaces/paginated.interface';
 import { FindAllClassesArgs } from './dto/find-all-classes.args';
 import { FindOneClassArgs } from './dto/find-one-class.args';
 import { Class } from './entities/class.entity';

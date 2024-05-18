@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { Expansion } from 'src/expansion/entities/expansion.entity';
+import { Expansion } from '../expansion/entities/expansion.entity';
 import { Rarity } from '../rarity/entities/rarity.entity';
 import { CardResolver } from './card.resolver';
 import { CardService } from './card.service';
