@@ -8,6 +8,7 @@ import { IEdgeType } from '../common/interfaces/paginated.interface';
 import { Expansion } from '../expansion/entities/expansion.entity';
 import { Rarity } from '../rarity/entities/rarity.entity';
 import { FindAllCardsArgs } from './dto/find-all-cards.args';
+import { FindByIdArgs } from './dto/find-by-id.args';
 import { Card } from './entities/card.entity';
 import { PaginatedCards } from './entities/paginated-card.entity';
 
@@ -126,6 +127,26 @@ export class CardService {
       pageInfo: { startCursor, endCursor, hasNextPage },
     };
   };
+
+  public async findById(args: FindByIdArgs): Promise<Card[]> {
+    if (!args.attributes.fields.includes('id')) {
+      args.attributes.fields.push('id');
+    }
+
+    const { attributes } = args;
+    const include: Includeable[] = this.getAssociations(attributes);
+
+    return this.cardModel.findAll({
+      where: {
+        id: {
+          [Op.in]: args.ids,
+        },
+      },
+      attributes: attributes.fields,
+      limit: 61,
+      include,
+    });
+  }
 
   /**
    * Retrieves an array of model inclusions.
