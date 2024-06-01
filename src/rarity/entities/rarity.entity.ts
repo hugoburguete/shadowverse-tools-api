@@ -3,7 +3,7 @@ import { Column, HasMany, Model, Table } from 'sequelize-typescript';
 import { Card } from '../../card/entities/card.entity';
 
 @ObjectType()
-@Table({ timestamps: false })
+@Table({ timestamps: false, tableName: 'rarities' })
 export class Rarity extends Model<Rarity> {
   @Field(() => Int, { description: 'The rarity identifier.' })
   @Column({ primaryKey: true, autoIncrement: true })

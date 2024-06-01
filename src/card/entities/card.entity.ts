@@ -21,7 +21,7 @@ export enum CardType {
 }
 
 @ObjectType()
-@Table({ timestamps: false })
+@Table({ timestamps: false, tableName: 'cards' })
 export class Card extends Model<Card, Partial<Card>> {
   @Field(() => Int)
   @Column({ primaryKey: true, autoIncrement: true })
