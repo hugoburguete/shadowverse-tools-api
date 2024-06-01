@@ -2394,15 +2394,15 @@ module.exports = {
         allowNull: true,
       },
       cost: {
-        type: Sequelize.TINYINT,
+        type: Sequelize.INTEGER,
         allowNull: true,
       },
       attack: {
-        type: Sequelize.TINYINT,
+        type: Sequelize.INTEGER,
         allowNull: true,
       },
       health: {
-        type: Sequelize.TINYINT,
+        type: Sequelize.INTEGER,
         allowNull: true,
       },
       image: Sequelize.STRING,

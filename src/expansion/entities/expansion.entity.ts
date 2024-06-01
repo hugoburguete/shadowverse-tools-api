@@ -3,7 +3,7 @@ import { Column, HasMany, Model, Table } from 'sequelize-typescript';
 import { Card } from '../../card/entities/card.entity';
 
 @ObjectType()
-@Table({ timestamps: false })
+@Table({ timestamps: false, tableName: 'expansions' })
 export class Expansion extends Model {
   @Field(() => Int, { description: 'The expansion identifier.' })
   @Column({ primaryKey: true })

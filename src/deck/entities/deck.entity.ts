@@ -21,7 +21,7 @@ export enum DeckFormat {
   description:
     'A Shadowverse evolve deck consisting of 1 leader, 40 to 50 main deck cards and up to 10 evolve cards',
 })
-@Table
+@Table({ tableName: 'decks' })
 export class Deck extends Model {
   @Field(() => Int, { description: 'The deck identifier.' })
   @Column({ primaryKey: true, autoIncrement: true })
