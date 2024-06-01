@@ -1,10 +1,12 @@
 import { UserInputError } from '@nestjs/apollo';
 import { ValidationError, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { config } from 'dotenv';
 import { AppModule } from './app.module';
 import { HttpErrorFilter } from './common/filters/http-error.filter';
 
 async function bootstrap() {
+  config();
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new HttpErrorFilter());
   app.useGlobalPipes(
@@ -20,8 +22,7 @@ async function bootstrap() {
     }),
   );
   app.enableCors({
-    // TODO: This should probably be something a bit more dynamic
-    origin: ['http://localhost:3000'],
+    origin: [process.env.CLIENT_APP_URL],
   });
   await app.listen(1337);
 }
