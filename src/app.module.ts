@@ -41,6 +41,9 @@ import { UserModule } from './user/user.module';
     }),
     SequelizeModule.forRoot({
       dialect: process.env.DATABASE_TYPE,
+      dialectOptions: {
+        ssl: process.env.APP_ENV === 'production',
+      },
       host: process.env.DATABASE_HOST,
       port: parseInt(process.env.DATABASE_PORT, 10),
       username: process.env.DATABASE_USER,
