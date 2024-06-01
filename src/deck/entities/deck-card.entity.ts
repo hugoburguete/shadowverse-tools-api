@@ -12,7 +12,7 @@ import { Deck } from './deck.entity';
 @ObjectType()
 @Table({ tableName: 'deck_cards' })
 export class DeckCard extends Model {
-  @Column({ primaryKey: true })
+  @Column({ primaryKey: true, autoIncrement: true })
   id?: number;
 
   @Field(() => Int)
