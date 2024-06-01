@@ -81,9 +81,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.sequelize.query(
-      `ALTER TABLE cards DROP FOREIGN KEY cards_classId_foreign_idx;`,
-    );
     await queryInterface.removeColumn('cards', 'classId');
     await queryInterface.dropTable('classes');
   },
