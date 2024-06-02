@@ -1,24 +1,14 @@
 'use strict';
 
-const { Op } = require('sequelize');
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('decks', {
+    await queryInterface.createTable('collections', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         unique: true,
-      },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      format: {
-        type: Sequelize.STRING,
-        allowNull: false,
       },
       userId: {
         type: Sequelize.INTEGER,
@@ -32,18 +22,18 @@ module.exports = {
       updatedAt: Sequelize.DATE,
     });
 
-    await queryInterface.createTable('deck_cards', {
+    await queryInterface.createTable('collection_cards', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         unique: true,
       },
-      deckId: {
+      collectionId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'decks',
+          model: 'collections',
           key: 'id',
         },
       },
@@ -55,22 +45,18 @@ module.exports = {
           key: 'id',
         },
       },
-      quantity: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
       createdAt: Sequelize.DATE,
       updatedAt: Sequelize.DATE,
     });
   },
 
   async down(queryInterface) {
-    await queryInterface.bulkDelete('deck_cards', {
+    await queryInterface.bulkDelete('collection_cards', {
       id: {
         [Op.gte]: 1,
       },
     });
-    await queryInterface.dropTable('deck_cards');
-    await queryInterface.dropTable('decks');
+    await queryInterface.dropTable('collection_cards');
+    await queryInterface.dropTable('collections');
   },
 };
